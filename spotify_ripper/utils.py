@@ -178,11 +178,13 @@ def format_track_string(ripper, format_string, idx, track):
 
     track_artist = to_ascii(
         escape_filename_part(track.artists[0].name))
-    track_artists = to_ascii(", ".join(
-        [artist.name for artist in track.artists]))
+    track_artists = to_ascii(
+        escape_filename_part(", ".join(
+            [artist.name for artist in track.artists])))
     if len(track.artists) > 1:
-        featuring_artists = to_ascii(", ".join(
-            [artist.name for artist in track.artists[1:]]))
+        featuring_artists = to_ascii(
+            escape_filename_part(", ".join(
+                [artist.name for artist in track.artists[1:]])))
     else:
         featuring_artists = ""
 
@@ -195,7 +197,8 @@ def format_track_string(ripper, format_string, idx, track):
         artist_array = \
             ripper.web.get_artists_on_album(current_album.link.uri)
         if artist_array is not None:
-            album_artists_web = to_ascii(", ".join(artist_array))
+            album_artists_web = to_ascii(
+                escape_filename_part(", ".join(artist_array)))
 
     album = to_ascii(escape_filename_part(track.album.name))
     track_name = to_ascii(escape_filename_part(track.name))
