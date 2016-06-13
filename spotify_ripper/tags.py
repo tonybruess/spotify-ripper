@@ -54,6 +54,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
         artists = ", ".join([artist.name for artist in track.artists]) \
             if args.all_artists else track.artists[0].name
         artists_ascii = to_ascii(artists, on_error)
+        album_artist = to_ascii(track.album.artist.name, on_error)
         title = to_ascii(track.name, on_error)
 
         # the comment tag can be formatted
@@ -127,6 +128,11 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             audio.tags.add(
                 id3.TPE1(text=[tag_to_ascii(artists, artists_ascii)],
                          encoding=3))
+            if album_artist is not None:
+                audio.tags.add(
+                    id3.TPE2(text=[tag_to_ascii(
+                                       track.album.artist.name, album_artist)],
+                             encoding=3))
             audio.tags.add(id3.TDRC(text=[str(track.album.year)],
                                     encoding=3))
             audio.tags.add(
@@ -186,6 +192,11 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             id3_dict.add(
                 id3.TPE1(text=[tag_to_ascii(artists, artists_ascii)],
                          encoding=3))
+            if album_artist is not None:
+                id3_dict.add(
+                    id3.TPE2(text=[tag_to_ascii(
+                                       track.album.artist.name, album_artist)],
+                             encoding=3))
             id3_dict.add(id3.TDRC(text=[str(track.album.year)],
                                   encoding=3))
             id3_dict.add(
@@ -239,6 +250,9 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
                 audio.tags["ALBUM"] = tag_to_ascii(track.album.name, album)
             audio.tags["TITLE"] = tag_to_ascii(track.name, title)
             audio.tags["ARTIST"] = tag_to_ascii(artists, artists_ascii)
+            if album_artist is not None:
+                audio.tags["ALBUMARTIST"] = \
+                    tag_to_ascii(track.album.artist.name, album_artist)
             audio.tags["DATE"] = str(track.album.year)
             audio.tags["YEAR"] = str(track.album.year)
             audio.tags["DISCNUMBER"] = str(track.disc)
@@ -272,6 +286,9 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
                 audio.tags["\xa9alb"] = tag_to_ascii(track.album.name, album)
             audio["\xa9nam"] = tag_to_ascii(track.name, title)
             audio.tags["\xa9ART"] = tag_to_ascii(artists, artists_ascii)
+            if album_artist is not None:
+                audio.tags["aART"] = \
+                    tag_to_ascii(track.album.artist.name, album_artist)
             audio.tags["\xa9day"] = str(track.album.year)
             audio.tags["disk"] = [(track.disc, num_discs)]
             audio.tags["trkn"] = [(track.index, num_tracks)]
@@ -299,6 +316,9 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
                 audio.tags[b"\xa9alb"] = tag_to_ascii(track.album.name, album)
             audio[b"\xa9nam"] = tag_to_ascii(track.name, title)
             audio.tags[b"\xa9ART"] = tag_to_ascii(artists, artists_ascii)
+            if album_artist is not None:
+                audio.tags[str("aART")] = tag_to_ascii(
+                    track.album.artist.name, album_artist)
             audio.tags[b"\xa9day"] = str(track.album.year)
             audio.tags[str("disk")] = (track.disc, num_discs)
             audio.tags[str("trkn")] = (track.index, num_tracks)
@@ -378,6 +398,9 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
         print(Fore.YELLOW + "Setting artist: " + artists_ascii + Fore.RESET)
         if album is not None:
             print(Fore.YELLOW + "Setting album: " + album + Fore.RESET)
+        if album_artist is not None:
+            print(Fore.YELLOW + "Setting album artist: " + album_artist +
+                  Fore.RESET)
         print(Fore.YELLOW + "Setting title: " + title + Fore.RESET)
         print(Fore.YELLOW + "Setting track info: (" +
               str(track.index) + ", " + str(num_tracks) + ")" + Fore.RESET)
