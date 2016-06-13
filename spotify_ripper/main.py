@@ -166,6 +166,10 @@ def main(prog_args=sys.argv[1:]):
         '--alac', action='store_true',
         help='Rip songs to Apple Lossless format instead of MP3')
     parser.add_argument(
+        '--all-artists', action='store_true',
+        help='Store all artists, rather than just the main artist, in the '
+             'track\'s metadata tag')
+    parser.add_argument(
         '--artist-album-type', nargs=1,
         help='Only load albums of specified types when passing a Spotify '
              'artist URI [Default=album,single,ep,compilation,appears_on]')

@@ -51,7 +51,9 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
         audio = None
         on_error = 'replace' if args.ascii_path_only else 'ignore'
         album = to_ascii(track.album.name, on_error)
-        artist = to_ascii(track.artists[0].name, on_error)
+        artists = ", ".join([artist.name for artist in track.artists]) \
+            if args.all_artists else track.artists[0].name
+        artists_ascii = to_ascii(artists, on_error)
         title = to_ascii(track.name, on_error)
 
         # the comment tag can be formatted
@@ -123,7 +125,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
                 id3.TIT2(text=[tag_to_ascii(track.name, title)],
                          encoding=3))
             audio.tags.add(
-                id3.TPE1(text=[tag_to_ascii(track.artists[0].name, artist)],
+                id3.TPE1(text=[tag_to_ascii(artists, artists_ascii)],
                          encoding=3))
             audio.tags.add(id3.TDRC(text=[str(track.album.year)],
                                     encoding=3))
@@ -182,7 +184,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
                 id3.TIT2(text=[tag_to_ascii(track.name, title)],
                          encoding=3))
             id3_dict.add(
-                id3.TPE1(text=[tag_to_ascii(track.artists[0].name, artist)],
+                id3.TPE1(text=[tag_to_ascii(artists, artists_ascii)],
                          encoding=3))
             id3_dict.add(id3.TDRC(text=[str(track.album.year)],
                                   encoding=3))
@@ -236,7 +238,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             if album is not None:
                 audio.tags["ALBUM"] = tag_to_ascii(track.album.name, album)
             audio.tags["TITLE"] = tag_to_ascii(track.name, title)
-            audio.tags["ARTIST"] = tag_to_ascii(track.artists[0].name, artist)
+            audio.tags["ARTIST"] = tag_to_ascii(artists, artists_ascii)
             audio.tags["DATE"] = str(track.album.year)
             audio.tags["YEAR"] = str(track.album.year)
             audio.tags["DISCNUMBER"] = str(track.disc)
@@ -269,7 +271,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             if album is not None:
                 audio.tags["\xa9alb"] = tag_to_ascii(track.album.name, album)
             audio["\xa9nam"] = tag_to_ascii(track.name, title)
-            audio.tags["\xa9ART"] = tag_to_ascii(track.artists[0].name, artist)
+            audio.tags["\xa9ART"] = tag_to_ascii(artists, artists_ascii)
             audio.tags["\xa9day"] = str(track.album.year)
             audio.tags["disk"] = [(track.disc, num_discs)]
             audio.tags["trkn"] = [(track.index, num_tracks)]
@@ -296,8 +298,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             if album is not None:
                 audio.tags[b"\xa9alb"] = tag_to_ascii(track.album.name, album)
             audio[b"\xa9nam"] = tag_to_ascii(track.name, title)
-            audio.tags[b"\xa9ART"] = tag_to_ascii(
-                track.artists[0].name, artist)
+            audio.tags[b"\xa9ART"] = tag_to_ascii(artists, artists_ascii)
             audio.tags[b"\xa9day"] = str(track.album.year)
             audio.tags[str("disk")] = (track.disc, num_discs)
             audio.tags[str("trkn")] = (track.index, num_tracks)
@@ -374,7 +375,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
 
         # log id3 tags
         print("-" * 79)
-        print(Fore.YELLOW + "Setting artist: " + artist + Fore.RESET)
+        print(Fore.YELLOW + "Setting artist: " + artists_ascii + Fore.RESET)
         if album is not None:
             print(Fore.YELLOW + "Setting album: " + album + Fore.RESET)
         print(Fore.YELLOW + "Setting title: " + title + Fore.RESET)
