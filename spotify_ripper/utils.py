@@ -171,6 +171,8 @@ def format_track_string(ripper, format_string, idx, track):
         track.load()
     if not track.album.is_loaded:
         track.album.load()
+    if current_album is None:
+        current_album = track.album
     album_browser = track.album.browse()
     album_browser.load()
 
@@ -185,13 +187,11 @@ def format_track_string(ripper, format_string, idx, track):
         featuring_artists = ""
 
     album_artist = to_ascii(
-        current_album.artist.name
-        if current_album is not None else track_artist)
+        escape_filename_part(current_album.artist.name))
     album_artists_web = track_artists
 
     # only retrieve album_artist_web if it exists in the format string
-    if (current_album is not None and
-            format_string.find("{album_artists_web}") >= 0):
+    if format_string.find("{album_artists_web}") >= 0:
         artist_array = \
             ripper.web.get_artists_on_album(current_album.link.uri)
         if artist_array is not None:
