@@ -56,6 +56,8 @@ Features
 
 -  option to rip to FLAC, a loseless codec, instead of MP3 (requires extra ``flac`` dependency)
 
+-  option to rip to AIFF, a loseless codec, instead of MP3 (requires extra ``sox`` dependency)
+
 -  option to rip to Ogg Vorbis instead of MP3 (requires extra ``vorbis-tools`` dependency)
 
 -  option to rip to Opus instead of MP3 (requires extra ``opus-tools`` dependency)
@@ -81,7 +83,7 @@ Command Line
 
 .. code::
 
-    usage: spotify-ripper [-h] [-S SETTINGS] [-a] [--aac] [--alac]
+    usage: spotify-ripper [-h] [-S SETTINGS] [-a] [--aac] [--aiff] [--alac]
                           [--artist-album-type ARTIST_ALBUM_TYPE]
                           [--artist-album-market ARTIST_ALBUM_MARKET] [-A]
                           [-b BITRATE] [-c] [--comp COMP] [--comment COMMENT]
@@ -95,10 +97,11 @@ Command Line
                           [--normalize] [-na] [-o] [--opus]
                           [--partial-check {none,weak,strict}]
                           [--play-token-resume RESUME_AFTER] [--playlist-m3u]
-                          [--playlist-wpl] [--playlist-sync] [-q VBR]
-                          [-Q {160,320,96}] [--remove-offline-cache]
-                          [--resume-after RESUME_AFTER] [-R REPLACE [REPLACE ...]]
-                          [-s] [--stereo-mode {j,s,f,d,m,l,r}]
+                          [--playlist-wpl] [--playlist-sync] [--plus-pcm]
+                          [--plus-wav] [-q VBR] [-Q {160,320,96}]
+                          [--remove-offline-cache] [--resume-after RESUME_AFTER]
+                          [-R REPLACE [REPLACE ...]] [-s]
+                          [--stereo-mode {j,s,f,d,m,l,r}]
                           [--stop-after STOP_AFTER] [-V] [--wav] [--vorbis] [-r]
                           uri [uri ...]
 
@@ -113,6 +116,7 @@ Command Line
                             Path to settings, config and temp files directory [Default=~/.spotify-ripper]
       -a, --ascii           Convert the file name and the metadata tags to ASCII encoding [Default=utf-8]
       --aac                 Rip songs to AAC format with FreeAAC instead of MP3
+      --aiff                Rip songs to lossless AIFF encoding instead of MP3
       --alac                Rip songs to Apple Lossless format instead of MP3
       --artist-album-type ARTIST_ALBUM_TYPE
                             Only load albums of specified types when passing a Spotify artist URI [Default=album,single,ep,compilation,appears_on]
@@ -163,6 +167,8 @@ Command Line
       --playlist-m3u        create a m3u file when ripping a playlist
       --playlist-wpl        create a wpl file when ripping a playlist
       --playlist-sync       Sync playlist songs (rename and remove old songs)
+      --plus-pcm            Saves a .pcm file in addition to the encoded file (e.g. mp3)
+      --plus-wav            Saves a .wav file in addition to the encoded file (e.g. mp3)
       -q VBR, --vbr VBR     VBR quality setting or target bitrate for Opus [Default=0]
       -Q {160,320,96}, --quality {160,320,96}
                             Spotify stream bitrate preference [Default=320]
@@ -342,6 +348,8 @@ Prerequisites
 
 -  (optional) `fdkaac <https://github.com/nu774/fdkaac>`__
 
+-  (optional) `sox <http://sox.sourceforge.net>`__
+
 Mac OS X
 ~~~~~~~~
 
@@ -451,6 +459,9 @@ In addition to MP3 encoding, ``spotify-ripper`` supports encoding to FLAC, AAC, 
     # Opus
     $ brew install opus-tools
 
+    # SoX
+    $ brew install sox
+
 **Ubuntu/Debian**
 
 .. code:: bash
@@ -478,6 +489,9 @@ In addition to MP3 encoding, ``spotify-ripper`` supports encoding to FLAC, AAC, 
 
     # Opus
     $ sudo apt-get install opus-tools
+
+    # SoX
+    $ sudo apt-get install install sox
 
 
 Upgrade
