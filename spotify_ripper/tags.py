@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from colorama import Fore, Style
-from mutagen import mp3, id3, flac, oggvorbis, oggopus, aac
+from mutagen import mp3, id3, flac, aiff, oggvorbis, oggopus, aac
 from stat import ST_SIZE
 from spotify_ripper.utils import *
 from datetime import datetime
@@ -315,6 +315,9 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
         if args.output_type == "flac":
             audio = flac.FLAC(audio_file)
             set_vorbis_comments(audio)
+        if args.output_type == "aiff":
+            audio = aiff.AIFF(audio_file)
+            set_id3_tags(audio)
         elif args.output_type == "ogg":
             audio = oggvorbis.OggVorbis(audio_file)
             set_vorbis_comments(audio)
@@ -406,6 +409,21 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             print("-" * 79)
             print(Fore.YELLOW + "Writing Vorbis comments - " +
                   audio.tags.vendor + Fore.RESET)
+            print("-" * 79)
+        if args.output_type == "aiff":
+            print("Time: " + format_time(audio.info.length) +
+                  "\tAudio Interchange File Format" +
+                  "\t[ " + bit_rate_str(audio.info.bitrate / 1000) + " @ " +
+                  str(audio.info.sample_rate) +
+                  " Hz - " + channel_str(audio.info.channels) + " ]")
+            print("-" * 79)
+            id3_version = "v%d.%d" % (
+                audio.tags.version[0], audio.tags.version[1])
+            print("ID3 " + id3_version + ": " +
+                  str(len(audio.tags.values())) + " frames")
+            print(
+                Fore.YELLOW + "Writing ID3 version " +
+                id3_version + Fore.RESET)
             print("-" * 79)
         if args.output_type == "alac.m4a":
             bit_rate = ((audio.info.bits_per_sample * audio.info.sample_rate) *

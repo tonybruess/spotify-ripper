@@ -159,6 +159,9 @@ def main(prog_args=sys.argv[1:]):
         '--aac', action='store_true',
         help='Rip songs to AAC format with FreeAAC instead of MP3')
     encoding_group.add_argument(
+        '--aiff', action='store_true',
+        help='Rip songs to lossless AIFF encoding instead of MP3')
+    encoding_group.add_argument(
         '--alac', action='store_true',
         help='Rip songs to Apple Lossless format instead of MP3')
     parser.add_argument(
@@ -402,6 +405,7 @@ def main(prog_args=sys.argv[1:]):
     # check that encoder tool is available
     encoders = {
         "flac": ("flac", "flac"),
+        "aiff": ("sox", "sox"),
         "aac": ("faac", "faac"),
         "ogg": ("oggenc", "vorbis-tools"),
         "opus": ("opusenc", "opus-tools"),
@@ -440,6 +444,8 @@ def main(prog_args=sys.argv[1:]):
         else:
             if args.output_type == "flac":
                 return "FLAC, Compression Level: " + args.comp
+            elif args.output_type == "aiff":
+                return "AIFF"
             elif args.output_type == "alac.m4a":
                 return "Apple Lossless (ALAC)"
             elif args.output_type == "ogg":
