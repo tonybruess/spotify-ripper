@@ -288,6 +288,12 @@ def main(prog_args=sys.argv[1:]):
         '--playlist-sync', action='store_true',
         help='Sync playlist songs (rename and remove old songs)')
     parser.add_argument(
+        '--plus-pcm', action='store_true',
+        help='Saves a .pcm file in addition to the encoded file (e.g. mp3)')
+    parser.add_argument(
+        '--plus-wav', action='store_true',
+        help='Saves a .wav file in addition to the encoded file (e.g. mp3)')
+    parser.add_argument(
         '-q', '--vbr',
         help='VBR quality setting or target bitrate for Opus [Default=0]')
     parser.add_argument(

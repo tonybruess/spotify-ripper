@@ -679,14 +679,20 @@ class Ripper(threading.Thread):
         file_size = calc_file_size(track)
         print("Track Download Size: " + format_size(file_size))
 
+        if args.output_type == "wav" or args.plus_wav:
+            audio_file = change_file_extension(self.audio_file, "wav") if \
+                args.output_type != "wav" else self.audio_file
+            self.wav_file = wave.open(enc_str(audio_file), "wb")
+            self.wav_file.setparams((2, 2, 44100, 0, 'NONE', 'not compressed'))
+
+        if args.output_type == "pcm" or args.plus_pcm:
+            audio_file = change_file_extension(self.audio_file, "pcm") if \
+                args.output_type != "pcm" else self.audio_file
+            self.pcm_file = open(enc_str(audio_file), 'wb')
+
         audio_file_enc = enc_str(self.audio_file)
 
-        if args.output_type == "wav":
-            self.wav_file = wave.open(audio_file_enc, "wb")
-            self.wav_file.setparams((2, 2, 44100, 0, 'NONE', 'not compressed'))
-        elif args.output_type == "pcm":
-            self.pcm_file = open(audio_file_enc, 'wb')
-        elif args.output_type == "flac":
+        if args.output_type == "flac":
             self.rip_proc = Popen(
                 ["flac", "-f", ("-" + str(args.comp)), "--silent", "--endian",
                  "little", "--channels", "2", "--bps", "16", "--sample-rate",

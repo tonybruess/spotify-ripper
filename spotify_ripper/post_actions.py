@@ -246,6 +246,18 @@ class PostActions(object):
             print(Fore.YELLOW + "Deleting partially ripped file" + Fore.RESET)
             rm_file(ripper.audio_file)
 
+            # check for any extra pcm or wav files
+            def delete_extra_file(ext):
+                audio_file = change_file_extension(ripper.audio_file, ext)
+                if path_exists(audio_file):
+                    rm_file(audio_file)
+
+            if self.args.plus_wav:
+                delete_extra_file("wav")
+
+            if self.args.plus_pcm:
+                delete_extra_file("pcm")
+
     def queue_remove_from_playlist(self, idx):
         ripper = self.ripper
 

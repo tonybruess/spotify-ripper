@@ -161,6 +161,10 @@ def get_playlist_track(track, playlist):
     return None
 
 
+def change_file_extension(file_name, ext):
+    return os.path.splitext(file_name)[0] + "." + ext
+
+
 def format_track_string(ripper, format_string, idx, track):
     args = get_args()
     current_album = ripper.current_album
