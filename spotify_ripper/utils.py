@@ -109,13 +109,13 @@ def default_settings_dir():
 
 def settings_dir():
     args = get_args()
-    return norm_path(args.settings[0]) if args.settings is not None \
+    return norm_path(args.settings) if args.settings is not None \
         else default_settings_dir()
 
 
 def base_dir():
     args = get_args()
-    return norm_path(args.directory[0]) if args.directory is not None \
+    return norm_path(args.directory) if args.directory is not None \
         else os.getcwd()
 
 

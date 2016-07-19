@@ -94,7 +94,7 @@ class Ripper(threading.Thread):
 
         # application key location
         if args.key is not None:
-            config.load_application_key_file(args.key[0])
+            config.load_application_key_file(args.key)
         else:
             if not path_exists(default_dir):
                 os.makedirs(enc_str(default_dir))
@@ -111,7 +111,7 @@ class Ripper(threading.Thread):
 
         # settings directory
         if args.settings is not None:
-            settings_dir = norm_path(args.settings[0])
+            settings_dir = norm_path(args.settings)
             config.settings_location = settings_dir
             config.cache_location = settings_dir
         else:
@@ -169,9 +169,9 @@ class Ripper(threading.Thread):
 
             if args.password is None:
                 password = getpass.getpass()
-                self.login_as_user(args.user[0], password)
+                self.login_as_user(args.user, password)
             else:
-                self.login_as_user(args.user[0], args.password[0])
+                self.login_as_user(args.user, args.password)
 
         return self.login_success
 
@@ -606,7 +606,7 @@ class Ripper(threading.Thread):
             return self.track_path_cache[track.link.uri]
 
         audio_file = \
-            format_track_string(self, args.format[0].strip(), idx, track)
+            format_track_string(self, args.format.strip(), idx, track)
 
         # in case the file name is too long
         def truncate(_str, max_size):

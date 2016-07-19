@@ -44,7 +44,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
     # try to get genres from Spotify's Web API
     genres = None
     if args.genres is not None:
-        genres = ripper.web.get_genres(args.genres[0], track)
+        genres = ripper.web.get_genres(args.genres, track)
 
     # use mutagen to update id3v2 tags and vorbis comments
     try:
@@ -57,12 +57,12 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
         # the comment tag can be formatted
         if args.comment is not None:
             comment = \
-                format_track_string(ripper, args.comment[0], idx, track)
+                format_track_string(ripper, args.comment, idx, track)
             comment_ascii = to_ascii(comment, on_error)
 
         if args.grouping is not None:
             grouping = \
-                format_track_string(ripper, args.grouping[0], idx, track)
+                format_track_string(ripper, args.grouping, idx, track)
             grouping_ascii = to_ascii(grouping, on_error)
 
         if genres is not None and genres:
@@ -91,9 +91,9 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
                             f.write(image.data)
 
                 if args.cover_file is not None:
-                    write_image(args.cover_file[0])
+                    write_image(args.cover_file)
                 elif args.cover_file_and_embed is not None:
-                    write_image(args.cover_file_and_embed[0])
+                    write_image(args.cover_file_and_embed)
                     embed_image_func()
                 else:
                     embed_image_func()

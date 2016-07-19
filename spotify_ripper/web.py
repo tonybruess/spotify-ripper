@@ -51,10 +51,10 @@ class WebAPI(object):
     def get_albums_with_filter(self, uri):
         args = self.args
 
-        album_type = ('&album_type=' + args.artist_album_type[0]) \
+        album_type = ('&album_type=' + args.artist_album_type) \
             if args.artist_album_type is not None else ""
 
-        market = ('&market=' + args.artist_album_market[0]) \
+        market = ('&market=' + args.artist_album_market) \
             if args.artist_album_market is not None else ""
 
         def get_albums_json(offset):

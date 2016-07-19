@@ -29,7 +29,7 @@ class PostActions(object):
 
             encoding = "ascii" if args.ascii else "utf-8"
             self.fail_log_file = codecs.open(os.path.join(
-                _base_dir, args.fail_log[0]), 'w', encoding)
+                _base_dir, args.fail_log), 'w', encoding)
 
     def log_success(self, track):
         self.success_tracks.append(track)
@@ -284,7 +284,7 @@ class PostActions(object):
 
         if self.args.remove_offline_cache:
             if self.args.settings is not None:
-                storage_path = norm_path(self.args.settings[0])
+                storage_path = norm_path(self.args.settings)
             else:
                 storage_path = default_settings_dir()
 

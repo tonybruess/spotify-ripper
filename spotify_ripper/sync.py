@@ -27,7 +27,7 @@ class Sync(object):
 
         # lib path
         if args.settings is not None:
-            lib_path = os.path.join(norm_path(args.settings[0]), "Sync")
+            lib_path = os.path.join(norm_path(args.settings), "Sync")
         else:
             lib_path = os.path.join(default_settings_dir(), "Sync")
 
