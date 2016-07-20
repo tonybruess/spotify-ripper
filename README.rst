@@ -84,7 +84,7 @@ Command Line
 .. code::
 
     usage: spotify-ripper [-h] [-S SETTINGS] [-a] [--aac] [--aiff] [--alac]
-                          [--artist-album-type ARTIST_ALBUM_TYPE]
+                          [--all-artists] [--artist-album-type ARTIST_ALBUM_TYPE]
                           [--artist-album-market ARTIST_ALBUM_MARKET] [-A]
                           [-b BITRATE] [-c] [--comp COMP] [--comment COMMENT]
                           [--cover-file COVER_FILE]
@@ -118,6 +118,7 @@ Command Line
       --aac                 Rip songs to AAC format with FreeAAC instead of MP3
       --aiff                Rip songs to lossless AIFF encoding instead of MP3
       --alac                Rip songs to Apple Lossless format instead of MP3
+      --all-artists         Store all artists, rather than just the main artist, in the track's metadata tag
       --artist-album-type ARTIST_ALBUM_TYPE
                             Only load albums of specified types when passing a Spotify artist URI [Default=album,single,ep,compilation,appears_on]
       --artist-album-market ARTIST_ALBUM_MARKET

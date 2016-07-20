@@ -175,31 +175,34 @@ def format_track_string(ripper, format_string, idx, track):
         track.load()
     if not track.album.is_loaded:
         track.album.load()
+    if current_album is None:
+        current_album = track.album
     album_browser = track.album.browse()
     album_browser.load()
 
     track_artist = to_ascii(
         escape_filename_part(track.artists[0].name))
-    track_artists = to_ascii(", ".join(
-        [artist.name for artist in track.artists]))
+    track_artists = to_ascii(
+        escape_filename_part(", ".join(
+            [artist.name for artist in track.artists])))
     if len(track.artists) > 1:
-        featuring_artists = to_ascii(", ".join(
-            [artist.name for artist in track.artists[1:]]))
+        featuring_artists = to_ascii(
+            escape_filename_part(", ".join(
+                [artist.name for artist in track.artists[1:]])))
     else:
         featuring_artists = ""
 
     album_artist = to_ascii(
-        current_album.artist.name
-        if current_album is not None else track_artist)
+        escape_filename_part(current_album.artist.name))
     album_artists_web = track_artists
 
     # only retrieve album_artist_web if it exists in the format string
-    if (current_album is not None and
-            format_string.find("{album_artists_web}") >= 0):
+    if format_string.find("{album_artists_web}") >= 0:
         artist_array = \
             ripper.web.get_artists_on_album(current_album.link.uri)
         if artist_array is not None:
-            album_artists_web = to_ascii(", ".join(artist_array))
+            album_artists_web = to_ascii(
+                escape_filename_part(", ".join(artist_array)))
 
     album = to_ascii(escape_filename_part(track.album.name))
     track_name = to_ascii(escape_filename_part(track.name))
