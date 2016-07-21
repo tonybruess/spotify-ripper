@@ -515,7 +515,8 @@ def main(prog_args=sys.argv[1:]):
           Fore.RESET + ("Yes" if args.overwrite else "No"))
 
     # patch a bug when Python 3/MP4
-    if sys.version_info >= (3, 0) and args.output_type == "m4a":
+    if sys.version_info >= (3, 0) and \
+            (args.output_type == "m4a" or args.output_type == "alac.m4a"):
         patch_bug_in_mutagen()
 
     ripper = Ripper(args)
