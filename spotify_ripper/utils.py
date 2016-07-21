@@ -93,7 +93,7 @@ def to_normalized_ascii(_str):
 
 def rm_file(file_name):
     try:
-        os.remove(file_name)
+        os.remove(enc_str(file_name))
     except OSError as e:
         # don't need to print a warning if the file doesn't exist
         if e.errno != errno.ENOENT:
@@ -352,7 +352,7 @@ def format_track_string(ripper, format_string, idx, track):
 # returns path of executable
 def which(program):
     def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+        return os.path.isfile(fpath) and os.access(enc_str(fpath), os.X_OK)
 
     fpath, fname = os.path.split(program)
     if fpath:

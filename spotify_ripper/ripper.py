@@ -336,6 +336,9 @@ class Ripper(threading.Thread):
                     # tracks from the playlist when everything is done
                     self.post.queue_remove_from_playlist(idx)
 
+                    # finally log success
+                    self.post.log_success(track)
+
                 except (spotify.Error, Exception) as e:
                     if isinstance(e, Exception):
                         print(Fore.RED + "Spotify error detected" + Fore.RESET)
@@ -799,7 +802,6 @@ class Ripper(threading.Thread):
             self.pcm_file = None
 
         self.ripping.clear()
-        self.post.log_success(track)
 
     def rip(self, session, sample_rate, frame_bytes, num_frames):
         if self.ripping.is_set():

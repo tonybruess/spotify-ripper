@@ -15,8 +15,9 @@ import base64
 def set_metadata_tags(args, audio_file, idx, track, ripper):
     # log completed file
     print(Fore.GREEN + Style.BRIGHT + os.path.basename(audio_file) +
-          Style.NORMAL + "\t[ " + format_size(os.stat(audio_file)[ST_SIZE]) +
-          " ]" + Fore.RESET)
+          Style.NORMAL + "\t[ " +
+          format_size(os.stat(enc_str(audio_file))[ST_SIZE]) + " ]" +
+          Fore.RESET)
 
     if args.output_type == "wav" or args.output_type == "pcm":
         print(Fore.YELLOW + "Skipping metadata tagging for " +
