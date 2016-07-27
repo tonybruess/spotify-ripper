@@ -339,7 +339,8 @@ def main(prog_args=sys.argv[1:]):
         help='Rip songs to Ogg Vorbis encoding instead of MP3')
     parser.add_argument(
         '-r', '--remove-from-playlist', action='store_true',
-        help='Delete tracks from playlist after successful '
+        help='[WARNING: SPOTIFY IS NOT PROPROGATING PLAYLIST CHANGES TO '
+             'THEIR SERVERS] Delete tracks from playlist after successful '
              'ripping [Default=no]')
     parser.add_argument(
         'uri', nargs="+",
@@ -383,6 +384,14 @@ def main(prog_args=sys.argv[1:]):
               "<YOUR_USER_NAME> instead of --user USER " +
               "<YOUR_USER_NAME>..." + Fore.RESET)
         sys.exit(1)
+
+    # give warning for broken feature
+    if args.remove_from_playlist:
+        print(Fore.RED + "--REMOVE-FROM-PLAYLIST WARNING:")
+        print("SPOTIFY IS NOT PROPROGATING PLAYLIST CHANGES "
+              "TO THEIR SERVERS.")
+        print("YOU WILL NOT SEE ANY CHANGES TO YOUR PLAYLIST ON THE " +
+              "OFFICIAL SPOTIFY DESKTOP OR WEB APP." + Fore.RESET)
 
     if args.wav:
         args.output_type = "wav"

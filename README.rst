@@ -188,7 +188,7 @@ Command Line
       --wav                 Rip songs to uncompressed WAV file instead of MP3
       --vorbis              Rip songs to Ogg Vorbis encoding instead of MP3
       -r, --remove-from-playlist
-                            Delete tracks from playlist after successful ripping [Default=no]
+                            [WARNING: SPOTIFY IS NOT PROPROGATING PLAYLIST CHANGES TO THEIR SERVERS] Delete tracks from playlist after successful ripping [Default=no]
 
     Example usage:
         rip a single file: spotify-ripper -u user spotify:track:52xaypL0Kjzk0ngwv3oBPR
