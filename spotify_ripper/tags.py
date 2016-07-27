@@ -91,7 +91,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
                     cover_path = os.path.dirname(audio_file)
                     cover_file = os.path.join(cover_path, file_name)
                     if not path_exists(cover_file):
-                        with open(cover_file, "wb") as f:
+                        with open(enc_str(cover_file), "wb") as f:
                             f.write(image.data)
 
                 if args.cover_file is not None:

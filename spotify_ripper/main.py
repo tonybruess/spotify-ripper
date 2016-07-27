@@ -363,7 +363,8 @@ def main(prog_args=sys.argv[1:]):
         if args.log == "-":
             init(strip=True)
         else:
-            log_file = open(args.log, 'a')
+            encoding = "ascii" if args.ascii else "utf-8"
+            log_file = codecs.open(enc_str(args.log), 'a', encoding)
             sys.stdout = wrap_stream(log_file, None, True, False, True)
     else:
         init(strip=True if args.strip_colors else None)
@@ -545,7 +546,9 @@ def main(prog_args=sys.argv[1:]):
     # check if we were passed a file name or search
     def check_uri_args():
         if len(args.uri) == 1 and path_exists(args.uri[0]):
-            args.uri = [line.strip() for line in open(args.uri[0])
+            encoding = "ascii" if args.ascii else "utf-8"
+            args.uri = [line.strip() for line in
+                codecs.open(enc_str(args.uri[0]), 'r', encoding)
                 if not line.strip().startswith("#") and len(line.strip()) > 0]
         elif len(args.uri) == 1 and not args.uri[0].startswith("spotify:"):
             args.uri = [list(ripper.search_query(args.uri[0]))]

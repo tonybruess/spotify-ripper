@@ -28,8 +28,9 @@ class PostActions(object):
                 os.makedirs(enc_str(_base_dir))
 
             encoding = "ascii" if args.ascii else "utf-8"
-            self.fail_log_file = codecs.open(os.path.join(
-                _base_dir, args.fail_log), 'w', encoding)
+            self.fail_log_file = codecs.open(
+                enc_str(os.path.join(_base_dir, args.fail_log)),
+                'w', encoding)
 
     def log_success(self, track):
         self.success_tracks.append(track)
@@ -178,7 +179,7 @@ class PostActions(object):
                   playlist_path + Fore.RESET)
 
             encoding = "ascii" if args.ascii else "utf-8"
-            with codecs.open(playlist_path, 'w', encoding) as playlist:
+            with codecs.open(enc_str(playlist_path), 'w', encoding) as playlist:
                 for idx, track in enumerate(tracks):
                     track.load()
                     if track.is_local:
@@ -203,7 +204,7 @@ class PostActions(object):
                   playlist_path + Fore.RESET)
 
             encoding = "ascii" if args.ascii else "utf-8"
-            with codecs.open(playlist_path, 'w', encoding) as playlist:
+            with codecs.open(enc_str(playlist_path), 'w', encoding) as playlist:
                 # to get an accurate track count
                 track_paths = []
                 for idx, track in enumerate(tracks):
