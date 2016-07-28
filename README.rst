@@ -297,6 +297,8 @@ Format String Variables
 |                                         | removed at the start of the string if it      |
 |                                         | exists                                        |
 +-----------------------------------------+-----------------------------------------------+
+|``{track_uri}``, ``{uri}``               | Spotify track uri                             |
++-----------------------------------------+-----------------------------------------------+
 
 Any substring in the format string that does not match a variable above will be passed through to the file/path name unchanged.
 
