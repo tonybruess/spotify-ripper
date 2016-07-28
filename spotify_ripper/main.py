@@ -334,6 +334,10 @@ def main(prog_args=sys.argv[1:]):
     encoding_group.add_argument(
         '--wav', action='store_true',
         help='Rip songs to uncompressed WAV file instead of MP3')
+    parser.add_argument(
+        '--windows-safe', action='store_true',
+        help='Make filename safe for Windows file system '
+             '(truncate filename to 255 characters)')
     encoding_group.add_argument(
         '--vorbis', action='store_true',
         help='Rip songs to Ogg Vorbis encoding instead of MP3')

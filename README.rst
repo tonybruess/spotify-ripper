@@ -102,7 +102,8 @@ Command Line
                           [--remove-offline-cache] [--resume-after RESUME_AFTER]
                           [-R REPLACE [REPLACE ...]] [-s]
                           [--stereo-mode {j,s,f,d,m,l,r}]
-                          [--stop-after STOP_AFTER] [-V] [--wav] [--vorbis] [-r]
+                          [--stop-after STOP_AFTER] [-V] [--wav] [--windows-safe]
+                          [--vorbis] [-r]
                           uri [uri ...]
 
     Rips Spotify URIs to MP3s with ID3 tags and album covers
@@ -186,6 +187,7 @@ Command Line
                             Stops script after a certain amount of time has passed (e.g. 1h30m). Alternatively, accepts a specific time in 24hr format to stop after (e.g 03:30, 16:15)
       -V, --version         show program's version number and exit
       --wav                 Rip songs to uncompressed WAV file instead of MP3
+      --windows-safe        Make filename safe for Windows file system (truncate filename to 255 characters)
       --vorbis              Rip songs to Ogg Vorbis encoding instead of MP3
       -r, --remove-from-playlist
                             [WARNING: SPOTIFY IS NOT PROPROGATING PLAYLIST CHANGES TO THEIR SERVERS] Delete tracks from playlist after successful ripping [Default=no]
