@@ -22,6 +22,7 @@ import itertools
 import wave
 import re
 import select
+import traceback
 
 try:
     # Python 3
@@ -343,6 +344,7 @@ class Ripper(threading.Thread):
                     if isinstance(e, Exception):
                         print(Fore.RED + "Spotify error detected" + Fore.RESET)
                     print(str(e))
+                    traceback.print_exc()
                     print("Skipping to next track...")
                     self.session.player.play(False)
                     self.post.clean_up_partial()
