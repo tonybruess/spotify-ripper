@@ -689,7 +689,9 @@ class Ripper(threading.Thread):
         if args.output_type == "wav" or args.plus_wav:
             audio_file = change_file_extension(self.audio_file, "wav") if \
                 args.output_type != "wav" else self.audio_file
-            self.wav_file = wave.open(enc_str(audio_file), "wb")
+            wav_file = audio_file if sys.version_info >= (3, 0) \
+                else enc_str(audio_file)
+            self.wav_file = wave.open(wav_file, "wb")
             self.wav_file.setparams((2, 2, 44100, 0, 'NONE', 'not compressed'))
 
         if args.output_type == "pcm" or args.plus_pcm:
