@@ -73,7 +73,10 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             genres_ascii = [to_ascii(genre) for genre in genres]
 
         # cover art image
-        image = track.album.cover()
+        if args.large_cover_art:
+            image = ripper.web.get_large_coverart(track.link.uri)
+        else:
+            image = track.album.cover()
 
         def tag_to_ascii(_str, _str_ascii):
             return _str if args.ascii_path_only else _str_ascii
@@ -86,34 +89,36 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
 
         def save_cover_image(embed_image_func):
             if image is not None:
-                image.load()
+                if not args.large_cover_art:
+                    image.load()
+                data = image if args.large_cover_art else image.data
                 def write_image(file_name):
                     cover_path = os.path.dirname(audio_file)
                     cover_file = os.path.join(cover_path, file_name)
                     if not path_exists(cover_file):
                         with open(enc_str(cover_file), "wb") as f:
-                            f.write(image.data)
+                            f.write(data)
 
                 if args.cover_file is not None:
                     write_image(args.cover_file)
                 elif args.cover_file_and_embed is not None:
                     write_image(args.cover_file_and_embed)
-                    embed_image_func()
+                    embed_image_func(data)
                 else:
-                    embed_image_func()
+                    embed_image_func(data)
 
         def set_id3_tags(audio):
             # add ID3 tag if it doesn't exist
             audio.add_tags()
 
-            def embed_image():
+            def embed_image(data):
                 audio.tags.add(
                     id3.APIC(
                         encoding=3,
                         mime='image/jpeg',
                         type=3,
                         desc='Front Cover',
-                        data=image.data
+                        data=data
                     )
                 )
 
@@ -170,14 +175,14 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             except id3.ID3NoHeaderError:
                 id3_dict = id3.ID3()
 
-            def embed_image():
+            def embed_image(data):
                 id3_dict.add(
                     id3.APIC(
                         encoding=3,
                         mime='image/jpeg',
                         type=3,
                         desc='Front Cover',
-                        data=image.data
+                        data=data
                     )
                 )
 
@@ -233,12 +238,12 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             if audio.tags is None:
                 audio.add_tags()
 
-            def embed_image():
+            def embed_image(data):
                 pic = flac.Picture()
                 pic.type = 3
                 pic.mime = "image/jpeg"
                 pic.desc = "Front Cover"
-                pic.data = image.data
+                pic.data = data
                 if args.output_type == "flac":
                     audio.add_picture(pic)
                 else:
@@ -278,8 +283,8 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             if audio.tags is None:
                 audio.add_tags()
 
-            def embed_image():
-                audio.tags["covr"] = mp4.MP4Cover(image.data)
+            def embed_image(data):
+                audio.tags["covr"] = mp4.MP4Cover(data)
 
             save_cover_image(embed_image)
 
@@ -308,8 +313,8 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             # add M4A tags if it doesn't exist
             audio.add_tags()
 
-            def embed_image():
-                audio.tags[str("covr")] = m4a.M4ACover(image.data)
+            def embed_image(data):
+                audio.tags[str("covr")] = m4a.M4ACover(data)
 
             save_cover_image(embed_image)
 

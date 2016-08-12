@@ -245,6 +245,10 @@ def main(prog_args=sys.argv[1:]):
     parser.add_argument(
         '-p', '--password',
         help='Spotify password [Default=ask interactively]')
+    parser.add_argument(
+        '--large-cover-art', action='store_true',
+        help='Attempt to retrieve 640x640 cover art from Spotify\'s Web API '
+             '[Default=300x300]')
     group.add_argument(
         '-l', '--last', action='store_true',
         help='Use last login credentials')

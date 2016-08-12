@@ -21,7 +21,8 @@ class WebAPI(object):
             "albums_with_filter": {},
             "artists_on_album": {},
             "genres": {},
-            "charts": {}
+            "charts": {},
+            "large_coverart": {}
         }
 
     def cache_result(self, name, uri, result):
@@ -231,3 +232,40 @@ class WebAPI(object):
 
         self.cache_result("charts", uri, charts_obj)
         return charts_obj
+
+
+    def get_large_coverart(self, uri):
+        def get_track_json(track_id):
+            url = self.api_url('tracks/' + track_id)
+            return self.request_json(url, "track")
+
+        def get_image_data(url):
+            response = self.request_url(url, "cover art")
+            return response.content
+
+        # check for cached result
+        cached_result = self.get_cached_result("large_coverart", uri)
+        if cached_result is not None:
+            return get_image_data(cached_result)
+
+        # extract album id from uri
+        uri_tokens = uri.split(':')
+        if len(uri_tokens) != 3:
+            return None
+
+        track = get_track_json(uri_tokens[2])
+        if track is None:
+            return None
+
+        try:
+            images = track['album']['images']
+        except KeyError:
+            return None
+
+        for image in images:
+            if image["width"] == 640:
+                self.cache_result("large_coverart", uri, image["url"])
+                return get_image_data(image["url"])
+
+        return None
+
