@@ -9,6 +9,7 @@ import time
 import spotify
 import codecs
 import shutil
+from spotify_ripper.remove_all_from_playlist import remove_all_from_playlist
 
 
 class PostActions(object):
@@ -266,7 +267,9 @@ class PostActions(object):
             if ripper.current_playlist:
                 if ripper.current_playlist.owner.canonical_name == \
                         ripper.session.user.canonical_name:
-                    self.tracks_to_remove.append(idx)
+                        #modified to use webAPI
+                        #self.tracks_to_remove.append(idx)
+                        remove_all_from_playlist(ripper.session.user.canonical_name, ripper.current_playlist)
                 else:
                     print(Fore.RED +
                           "This track will not be removed from playlist " +
