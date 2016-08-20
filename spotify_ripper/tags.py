@@ -75,6 +75,10 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
         # cover art image
         if args.large_cover_art:
             image = ripper.web.get_large_coverart(track.link.uri)
+
+            # if we fail, use regular cover size
+            if image is None:
+                image = track.album.cover()
         else:
             image = track.album.cover()
 
