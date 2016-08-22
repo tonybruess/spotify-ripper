@@ -270,6 +270,7 @@ class PostActions(object):
                         #modified to use webAPI
                         #self.tracks_to_remove.append(idx)
                         remove_all_from_playlist(ripper.session.user.canonical_name, ripper.current_playlist.link.uri)
+                        print("Emptying Playlist")
                 else:
                     print(Fore.RED +
                           "This track will not be removed from playlist " +
@@ -282,18 +283,7 @@ class PostActions(object):
                       "Did you use '-r' without a playlist link?" + Fore.RESET)
 
     def remove_tracks_from_playlist(self):
-        ripper = self.ripper
-
-        if self.args.remove_from_playlist and \
-                ripper.current_playlist and len(self.tracks_to_remove) > 0:
-            print(Fore.YELLOW +
-                  "Removing successfully ripped tracks from playlist " +
-                  ripper.current_playlist.name + "..." + Fore.RESET)
-
-            ripper.current_playlist.remove_tracks(self.tracks_to_remove)
-
-            while ripper.current_playlist.has_pending_changes:
-                time.sleep(0.1)
+        print("Playlist Emptied!")
 
     def remove_offline_cache(self):
         ripper = self.ripper
