@@ -588,15 +588,17 @@ def main(prog_args=sys.argv[1:]):
         abort(set_logged_in=True)
 
     # wait for ripping thread to finish
-    stdin_settings = termios.tcgetattr(sys.stdin)
+    if not args.has_log:
+        stdin_settings = termios.tcgetattr(sys.stdin)
     try:
-        tty.setcbreak(sys.stdin.fileno())
+        if not args.has_log:
+            tty.setcbreak(sys.stdin.fileno())
 
         while ripper.isAlive():
             schedule.run_pending()
 
             # check if the escape button was pressed
-            if hasStdinData():
+            if not args.has_log and hasStdinData():
                 c = sys.stdin.read(1)
                 if c == '\x1b':
                     skip()
@@ -607,7 +609,8 @@ def main(prog_args=sys.argv[1:]):
         print("\n" + Fore.RED + "Aborting..." + Fore.RESET)
         abort()
     finally:
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, stdin_settings)
+        if not args.has_log:
+            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, stdin_settings)
 
 if __name__ == '__main__':
     main()
