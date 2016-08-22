@@ -19,7 +19,7 @@ def _read(fn):
     return open(path).read()
 
 setup(
-    name='spotify-ripper-fix',
+    name='spotify-ripper',
     version='2.11',
     packages=find_packages(exclude=["tests"]),
     scripts=['spotify_ripper/main.py'],
