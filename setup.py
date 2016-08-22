@@ -19,8 +19,8 @@ def _read(fn):
     return open(path).read()
 
 setup(
-    name='spotify-ripper',
-    version='2.10.4',
+    name='spotify-ripper-fix',
+    version='2.11',
     packages=find_packages(exclude=["tests"]),
     scripts=['spotify_ripper/main.py'],
     include_package_data=True,
@@ -55,7 +55,7 @@ setup(
     license='MIT',
     keywords="spotify ripper mp3 ogg vorbis flac opus acc mp4 m4a",
     url='https://github.com/SolidHal/spotify-ripper',
-    download_url='https://github.com/SolidHal/spotify-ripper/archive/2.10.4-fix.tar.gz',
+    download_url='https://github.com/SolidHal/spotify-ripper/archive/2.11.tar.gz',
     classifiers=[
         'Topic :: Multimedia :: Sound/Audio',
         'Topic :: Multimedia :: Sound/Audio :: Capture/Recording',
