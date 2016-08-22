@@ -20,7 +20,7 @@ def _read(fn):
 
 setup(
     name='spotify-ripper',
-    version='3.1',
+    version='2.11',
     packages=find_packages(exclude=["tests"]),
     scripts=['spotify_ripper/main.py'],
     include_package_data=True,
