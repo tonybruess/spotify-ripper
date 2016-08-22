@@ -269,7 +269,7 @@ class PostActions(object):
                         ripper.session.user.canonical_name:
                         #modified to use webAPI
                         #self.tracks_to_remove.append(idx)
-                        remove_all_from_playlist(ripper.session.user.canonical_name, ripper.current_playlist)
+                        remove_all_from_playlist(ripper.session.user.canonical_name, ripper.current_playlist.link)
                 else:
                     print(Fore.RED +
                           "This track will not be removed from playlist " +
