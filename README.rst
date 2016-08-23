@@ -1,9 +1,9 @@
 spotify-ripper |Version|
 ========================
-
 A fork of
-`spotify-ripper <https://github.com/robbeofficial/spotifyripper>`__ that
-uses `pyspotify <https://github.com/mopidy/pyspotify>`__ v2.x and `spotipy <https://github.com/plamere/spotipy>`__ for WebAPI integration
+`spotify-ripper <https://github.com/jrnewell/spotify-ripper`__ that uses `spotipy <https://github.com/plamere/spotipy>`__ for WebAPI integration and playlist updating
+
+
 
 Spotify-ripper is a small ripper script for Spotify that rips Spotify
 URIs to audio files and includes ID3 tags and cover art.  By default spotify-ripper will encode to MP3 files, but includes the ability to rip to WAV, FLAC, Ogg Vorbis, Opus, AAC, and MP4/M4A.
@@ -403,7 +403,7 @@ To install spotify-ripper once pyenv is setup:
     $ sudo ln -s /usr/local/opt/libspotify/lib/libspotify.12.1.51.dylib \
         /usr/local/opt/libspotify/lib/libspotify
     $ brew install lame
-    $ pip install spotify-ripper
+    $ pip install git+https://github.com/SolidHal/spotify-ripper
     $ pyenv rehash
 
 **Note that Spotify may no longer be issuing developer keys.** See `Libspotify’s Deprecation`_
@@ -443,7 +443,7 @@ To install spotify-ripper once pyenv is setup:
     $ cd libspotify-12.1.51-Linux-x86_64-release/
     $ sudo make install prefix=/usr/local
     $ pip install spotipy
-    $ pip install spotify-ripper
+    $ pip3 install git+https://github.com/SolidHal/spotify-ripper --upgrade
     $ pyenv rehash
 
 **Note that Spotify may no longer be issuing developer keys.** See `Libspotify’s Deprecation`_
@@ -528,7 +528,7 @@ Use ``pip`` to upgrade to the latest version.
 
 .. code:: bash
 
-    $ pip install --upgrade spotify-ripper
+    $ pip install --upgrade git+https://github.com/SolidHal/spotify-ripper
 
 
 Common Issues and Problems
