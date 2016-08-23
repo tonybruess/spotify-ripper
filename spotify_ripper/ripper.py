@@ -364,12 +364,16 @@ class Ripper(threading.Thread):
             self.post.remove_offline_cache()
 
         # logout, we are done
-        self.post.end_failure_log()
-        self.post.print_summary()
-        self.logout()
-        self.stop_event_loop()
-        self.finished.set()
-        sys.exit()
+        try:
+            self.post.end_failure_log()
+            self.post.print_summary()
+            self.logout()
+            self.stop_event_loop()
+            self.finished.set()
+        except:  # catch *all* exceptions
+            e = sys.exc_info()[0]
+            print(e)
+            sys.exit()
 
     def check_stop_time(self):
         args = self.args
