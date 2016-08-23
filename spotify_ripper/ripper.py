@@ -358,7 +358,7 @@ class Ripper(threading.Thread):
             self.post.create_playlist_wpl(tracks)
 
             # actually removing the tracks from playlist
-            self.post.remove_tracks_from_playlist()
+            #self.post.remove_tracks_from_playlist()
 
             # remove libspotify's offline storage cache
             self.post.remove_offline_cache()
@@ -369,6 +369,7 @@ class Ripper(threading.Thread):
         self.logout()
         self.stop_event_loop()
         self.finished.set()
+        sys.exit()
 
     def check_stop_time(self):
         args = self.args
