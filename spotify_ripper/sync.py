@@ -59,7 +59,7 @@ class Sync(object):
 
     def sync_playlist(self, playlist):
         args = self.args
-        playlist.load()
+        playlist.load(args.timeout)
         lib = self.load_sync_library(playlist)
         new_lib = {}
 
@@ -68,7 +68,7 @@ class Sync(object):
         # create new lib
         for idx, track in enumerate(playlist.tracks):
             try:
-                track.load()
+                track.load(args.timeout)
                 if track.availability != 1 or track.is_local:
                     continue
 

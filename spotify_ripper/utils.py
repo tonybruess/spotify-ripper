@@ -172,13 +172,13 @@ def format_track_string(ripper, format_string, idx, track):
 
     # this fixes the track.disc
     if not track.is_loaded:
-        track.load()
+        track.load(args.timeout)
     if not track.album.is_loaded:
-        track.album.load()
+        track.album.load(args.timeout)
     if current_album is None:
         current_album = track.album
     album_browser = track.album.browse()
-    album_browser.load()
+    album_browser.load(args.timeout)
 
     track_artist = to_ascii(
         escape_filename_part(track.artists[0].name))
@@ -239,7 +239,7 @@ def format_track_string(ripper, format_string, idx, track):
     if (format_string.find("{copyright}") >= 0 or
             format_string.find("{label}") >= 0):
         album_browser = track.album.browse()
-        album_browser.load()
+        album_browser.load(args.timeout)
         if len(album_browser.copyrights) > 0:
             copyright = escape_filename_part(album_browser.copyrights[0])
             label = re.sub(r"^[0-9]+\s+", "", copyright)

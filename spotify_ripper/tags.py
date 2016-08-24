@@ -26,11 +26,11 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
 
     # ensure everything is loaded still
     if not track.is_loaded:
-        track.load()
+        track.load(args.timeout)
     if not track.album.is_loaded:
-        track.album.load()
+        track.album.load(args.timeout)
     album_browser = track.album.browse()
-    album_browser.load()
+    album_browser.load(args.timeout)
 
     # calculate num of tracks on disc and num of dics
     num_discs = 0
@@ -81,7 +81,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
         if image is None:
             image = track.album.cover()
             if image is not None:
-                image.load()
+                image.load(args.timeout)
                 image = image.data
 
         def tag_to_ascii(_str, _str_ascii):
