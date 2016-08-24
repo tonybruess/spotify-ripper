@@ -121,7 +121,8 @@ class Ripper(threading.Thread):
 
         self.session = spotify.Session(config=config)
         self.session.volume_normalization = args.normalize
-
+        self.session.social.private_session = True
+        
         # disable scrobbling
         self.session.social.set_scrobbling(
             spotify.SocialProvider.SPOTIFY,
