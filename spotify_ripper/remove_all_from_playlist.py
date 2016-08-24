@@ -8,7 +8,7 @@ def remove_all_from_playlist(username, playlistURI):
     client_id = ''
     client_secret = ''
 
-    scope = 'playlist-modify-public'
+    scope = 'playlist-modify-public playlist-modify-private playlist-read-collaborative'
 
     p1, p2, p3, p4, rPlaylistID = playlistURI.split(':', 5)
 
