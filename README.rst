@@ -326,25 +326,23 @@ If you want to redownload a playlist (for example with improved quality), you ei
 Remove From Playlist Option
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Since the work around to remove songs from a playlist uses the Spotify Web API, to enable --remove-from-playlist you must go through a few steps
-1: Make an application at https://developer.spotify.com/my-applications/ name it whatever you like
 
-2: generate and store you client_id and client_secret, you'll need these later
+1: 
+Make an application at https://developer.spotify.com/my-applications/ name it whatever you like
 
-3: Add http://www.purple.com to your applications Redirect URI's, make sure to click the green "ADD" button to the right of the field before pressing SAVE.
-   I am not affiliated with www.purple.com, I just like what they do. If you want to use a different URI, ensure it doesn't use https and change the redirect_uri in remove_all_from_playlist.py
+2: Generate and store you client_id and client_secret, you'll need these later
+
+3: Add http://www.purple.com to your applications Redirect URI's, make sure to click the green "ADD" button to the right of the field before pressing SAVE. I am not affiliated with www.purple.com, I just like what they do. If you want to use a different URI, ensure it doesn't use https and change the redirect_uri in remove_all_from_playlist.py
    
 4: Press the "SAVE" button at the bottom of the page
 
-5: Install this package if you haven't already and navigate to it in the python version you installed it with (I would suggest Python 3 at least)
-   For example, my installation directory is "/usr/local/lib/python3.4/dist-packages/spotify_ripper/"
+5: Install this package if you haven't already and navigate to it in the python version you installed it with (I would  suggest Python 3 at least) For example, my installation directory is "/usr/local/lib/python3.4/dist-packages/spotify_ripper/"
    
 6: open remove_all_from_playlist.py in your favorite text editor. Add your client_id and client_secret between the single quotes next to the variables named the same thing
 
 7: If you have been using spotify-ripper for a while, it probably doesn't have accurate cache data on your playlists anymore. Find your ".spotify-ripper" folder, most likely in your home directory, and delete your "Users" folder. It will be regenerated on the next run.
 
-8: Finally, run spotify-ripper with the --remove-from-playlist command. When prompted, open the link it says it's opening for you in a web browser. Log into spotify, give it permission, and the copy the entire url it redirects to.
-   If you're using the default redirect_url, it should be in the form "http://www.purple.com/?code=XXXXXXXXXXXX....."
-   Ensure you haven't typed any other characters into where it asks for the URL you were redirected to, paste the URL and press enter. For some reason, when run through SSH you won't see anything you type or paste into this field.
+8: Finally, run spotify-ripper with the --remove-from-playlist command. When prompted, open the link it says it's opening for you in a web browser. Log into spotify, give it permission, and the copy the entire url it redirects to. If you're using the default redirect_url, it should be in the form "http://www.purple.com/?code=XXXXXXXXXXXX....." Ensure you haven't typed any other characters into where it asks for the URL you were redirected to, paste the URL and press enter. For some reason, when run through SSH you won't see anything you type or paste into this field.
 
 If you followed all of these steps correctly, spotify-ripper will completely empty the playlist you are ripping from when it finishes.
 
