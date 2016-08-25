@@ -265,7 +265,7 @@ class Ripper(threading.Thread):
                         break
 
                     print('Loading track...')
-                    track.load()
+                    track.load(args.timeout)
                     if track.availability != 1 or track.is_local:
                         print(
                             Fore.RED + 'Track is not available, '
@@ -418,6 +418,7 @@ class Ripper(threading.Thread):
         if not uri:
             return iter([])
 
+        args = self.args
         link = self.session.get_link(uri)
         if link.type == spotify.LinkType.TRACK:
             track = link.as_track()
@@ -438,7 +439,7 @@ class Ripper(threading.Thread):
                 attempt_count += 1
 
             print('Loading playlist...')
-            self.current_playlist.load()
+            self.current_playlist.load(args.timeout)
             return iter(self.current_playlist.tracks)
         elif link.type == spotify.LinkType.STARRED:
             link_user = link.as_user()
@@ -464,20 +465,20 @@ class Ripper(threading.Thread):
                 attempt_count += 1
 
             print('Loading starred playlist...')
-            starred.load()
+            starred.load(args.timeout)
             return iter(starred.tracks)
         elif link.type == spotify.LinkType.ALBUM:
             album = link.as_album()
             album_browser = album.browse()
             print('Loading album browser...')
-            album_browser.load()
+            album_browser.load(args.timeout)
             self.current_album = album
             return iter(album_browser.tracks)
         elif link.type == spotify.LinkType.ARTIST:
             artist = link.as_artist()
             artist_browser = artist.browse()
             print('Loading artist browser...')
-            artist_browser.load()
+            artist_browser.load(args.timeout)
             return iter(artist_browser.tracks)
         return iter([])
 
@@ -486,7 +487,7 @@ class Ripper(threading.Thread):
 
         try:
             result = self.session.search(query)
-            result.load()
+            result.load(self.args.timeout)
         except spotify.Error as e:
             print(str(e))
             return iter([])
@@ -611,7 +612,7 @@ class Ripper(threading.Thread):
         args = self.args
 
         # check if we cached the result already
-        track.load()
+        track.load(args.timeout)
         if track.link.uri in self.track_path_cache:
             return self.track_path_cache[track.link.uri]
 

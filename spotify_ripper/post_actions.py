@@ -65,7 +65,7 @@ class PostActions(object):
         def log_tracks(tracks):
             for track in tracks:
                 try:
-                    track.load()
+                    track.load(self.args.timeout)
                     if (len(track.artists) > 0 and track.artists[0].name
                             is not None and track.name is not None):
                         print_with_bullet(track.artists[0].name + " - " +
@@ -182,7 +182,7 @@ class PostActions(object):
             encoding = "ascii" if args.ascii else "utf-8"
             with codecs.open(enc_str(playlist_path), 'w', encoding) as playlist:
                 for idx, track in enumerate(tracks):
-                    track.load()
+                    track.load(args.timeout)
                     if track.is_local:
                         continue
                     _file = ripper.format_track_path(idx, track)
@@ -209,7 +209,7 @@ class PostActions(object):
                 # to get an accurate track count
                 track_paths = []
                 for idx, track in enumerate(tracks):
-                    track.load()
+                    track.load(args.timeout)
                     if track.is_local:
                         continue
                     _file = ripper.format_track_path(idx, track)

@@ -162,7 +162,7 @@ class WebAPI(object):
 
             res = self.request_url(url, region + " " + metrics + " charts")
             if res is not None:
-                csv_items = [enc_str(r) for r in res.text.split("\n")]
+                csv_items = [enc_str(to_ascii(r)) for r in res.text.split("\n")]
                 reader = csv.DictReader(csv_items)
                 return ["spotify:track:" + row["URL"].split("/")[-1]
                             for row in reader]

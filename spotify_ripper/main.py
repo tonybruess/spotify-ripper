@@ -334,6 +334,9 @@ def main(prog_args=sys.argv[1:]):
              '(e.g. 1h30m). Alternatively, accepts a specific time in 24hr '
              'format to stop after (e.g 03:30, 16:15)')
     parser.add_argument(
+        '--timeout', type=int,
+        help='Override the PySpotify timeout value in seconds (Default=10 seconds)')
+    parser.add_argument(
         '-V', '--version', action='version', version=prog_version)
     encoding_group.add_argument(
         '--wav', action='store_true',

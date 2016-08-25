@@ -26,11 +26,11 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
 
     # ensure everything is loaded still
     if not track.is_loaded:
-        track.load()
+        track.load(args.timeout)
     if not track.album.is_loaded:
-        track.album.load()
+        track.album.load(args.timeout)
     album_browser = track.album.browse()
-    album_browser.load()
+    album_browser.load(args.timeout)
 
     # calculate num of tracks on disc and num of dics
     num_discs = 0
@@ -73,14 +73,16 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             genres_ascii = [to_ascii(genre) for genre in genres]
 
         # cover art image
+        image = None
         if args.large_cover_art:
             image = ripper.web.get_large_coverart(track.link.uri)
 
-            # if we fail, use regular cover size
-            if image is None:
-                image = track.album.cover()
-        else:
+        # if we fail, use regular cover size
+        if image is None:
             image = track.album.cover()
+            if image is not None:
+                image.load(args.timeout)
+                image = image.data
 
         def tag_to_ascii(_str, _str_ascii):
             return _str if args.ascii_path_only else _str_ascii
@@ -93,23 +95,20 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
 
         def save_cover_image(embed_image_func):
             if image is not None:
-                if not args.large_cover_art:
-                    image.load()
-                data = image if args.large_cover_art else image.data
                 def write_image(file_name):
                     cover_path = os.path.dirname(audio_file)
                     cover_file = os.path.join(cover_path, file_name)
                     if not path_exists(cover_file):
                         with open(enc_str(cover_file), "wb") as f:
-                            f.write(data)
+                            f.write(image)
 
                 if args.cover_file is not None:
                     write_image(args.cover_file)
                 elif args.cover_file_and_embed is not None:
                     write_image(args.cover_file_and_embed)
-                    embed_image_func(data)
+                    embed_image_func(image)
                 else:
-                    embed_image_func(data)
+                    embed_image_func(image)
 
         def set_id3_tags(audio):
             # add ID3 tag if it doesn't exist

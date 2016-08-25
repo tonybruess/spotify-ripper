@@ -65,7 +65,7 @@ class Progress(object):
                 track = pair[0]
                 audio_file = pair[1]
 
-                track.load()
+                track.load(self.args.timeout)
                 # check if we should skip track
                 if track.availability != 1 or track.is_local:
                     self.skipped_tracks += 1

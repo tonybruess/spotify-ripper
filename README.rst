@@ -93,8 +93,8 @@ Command Line
                           [--format-case {upper,lower,capitalize}] [--flat]
                           [--flat-with-index] [-g {artist,album}]
                           [--grouping GROUPING] [--id3-v23] [-k KEY] [-u USER]
-                          [-p PASSWORD] [-l] [-L LOG] [--pcm] [--mp4]
-                          [--normalize] [-na] [-o] [--opus]
+                          [-p PASSWORD] [--large-cover-art] [-l] [-L LOG] [--pcm]
+                          [--mp4] [--normalize] [-na] [-o] [--opus]
                           [--partial-check {none,weak,strict}]
                           [--play-token-resume RESUME_AFTER] [--playlist-m3u]
                           [--playlist-wpl] [--playlist-sync] [--plus-pcm]
@@ -102,8 +102,8 @@ Command Line
                           [--remove-offline-cache] [--resume-after RESUME_AFTER]
                           [-R REPLACE [REPLACE ...]] [-s]
                           [--stereo-mode {j,s,f,d,m,l,r}]
-                          [--stop-after STOP_AFTER] [-V] [--wav] [--windows-safe]
-                          [--vorbis] [-r]
+                          [--stop-after STOP_AFTER] [--timeout TIMEOUT] [-V]
+                          [--wav] [--windows-safe] [--vorbis] [-r]
                           uri [uri ...]
 
     Rips Spotify URIs to MP3s with ID3 tags and album covers
@@ -153,6 +153,7 @@ Command Line
       -u USER, --user USER  Spotify username
       -p PASSWORD, --password PASSWORD
                             Spotify password [Default=ask interactively]
+      --large-cover-art     Attempt to retrieve 640x640 cover art from Spotify's Web API [Default=300x300]
       -l, --last            Use last login credentials
       -L LOG, --log LOG     Log in a log-friendly format to a file (use - to log to stdout)
       --pcm                 Saves a .pcm file with the raw PCM data instead of MP3
@@ -185,6 +186,7 @@ Command Line
                             Advanced stereo settings for Lame MP3 encoder only
       --stop-after STOP_AFTER
                             Stops script after a certain amount of time has passed (e.g. 1h30m). Alternatively, accepts a specific time in 24hr format to stop after (e.g 03:30, 16:15)
+      --timeout TIMEOUT     Override the PySpotify timeout value in seconds (Default=10 seconds)
       -V, --version         show program's version number and exit
       --wav                 Rip songs to uncompressed WAV file instead of MP3
       --windows-safe        Make filename safe for Windows file system (truncate filename to 255 characters)
