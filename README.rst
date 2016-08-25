@@ -348,6 +348,13 @@ Make an application at https://developer.spotify.com/my-applications/ name it wh
 
 If you followed all of these steps correctly, spotify-ripper will completely empty the playlist you are ripping from when it finishes.
 
+A couple notes about Spotify's WebAPI token authentication:
+- The token is stored in a file named .profile-“username” without quotes
+
+- The authentication token is stored where the script is executed from, so if you're in your home directory and execute a script thats in /usr/bin it will be stored in your home directory
+
+- If you are running this in a script or other form of automation, you'll have to manually authenticate once but after that as long as you always execute it from the same location you won't have to authenticate again.
+
 Installation
 ------------
 
