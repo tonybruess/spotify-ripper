@@ -425,6 +425,7 @@ class Ripper(threading.Thread):
             track = link.as_track()
             return iter([track])
         elif link.type == spotify.LinkType.PLAYLIST:
+            print('get playlist tracks')
             tracks = get_playlist_tracks(ripper.session.user.canonical_name, ripper.current_playlist.link.uri)
             # self.current_playlist = link.as_playlist()
             # attempt_count = 1
@@ -439,7 +440,6 @@ class Ripper(threading.Thread):
             #     time.sleep(5.0)
             #     self.current_playlist = link.as_playlist()
             #     attempt_count += 1
-
             print('Loading playlist...')
             self.current_playlist.load(args.timeout)
             return iter(tracks)
