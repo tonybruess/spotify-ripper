@@ -7,9 +7,9 @@ client_id = ''
 client_secret = ''
 scope = 'playlist-modify-public playlist-modify-private playlist-read-collaborative'
 
-os.environ["SPOTIPY_CLIENT_ID"] = client_id
-os.environ["SPOTIPY_CLIENT_SECRET"] = client_secret
-os.environ["SPOTIPY_REDIRECT_URI"] = redirect_uri
+client_id = os.environ['SPOTIPY_CLIENT_ID'] 
+client_secret = os.environ['SPOTIPY_CLIENT_SECRET']
+redirect_uri = os.environ['SPOTIPY_REDIRECT_URI']
 
 def remove_all_from_playlist(username, playlistURI):
     tracks = get_playlist_tracks(username, playlistURI)
@@ -32,7 +32,7 @@ def get_playlist_tracks(username, playlistURI):
 
     print('Getting Results')
     results = spotInstance.user_playlist(username, rPlaylistID, fields="tracks,next")
-    
+
     tracks = results['tracks']
 
     return tracks
