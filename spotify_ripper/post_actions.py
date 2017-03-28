@@ -284,6 +284,8 @@ class PostActions(object):
 
     def remove_tracks_from_playlist(self):
         ripper = self.ripper
+        print(ripper.playlist_uri)
+        print(type(ripper.playlist_uri))
         remove_all_from_playlist(ripper.session.user.canonical_name, ripper.playlist_uri)
         print("Playlist Emptied!")
 
