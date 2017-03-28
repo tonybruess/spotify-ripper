@@ -441,7 +441,7 @@ class Ripper(threading.Thread):
             #     self.current_playlist = link.as_playlist()
             #     attempt_count += 1
             print('Loading playlist...')
-            self.current_playlist.load(args.timeout)
+            #self.current_playlist.load(args.timeout)
             return iter(tracks)
         elif link.type == spotify.LinkType.STARRED:
             link_user = link.as_user()
