@@ -441,7 +441,7 @@ class Ripper(threading.Thread):
                     #curTrack = x.get('uri')
                     #print(curTrack)
                     #count = count + 1
-                    uriList.append(curTrack.get(uri))
+                    #uriList.append(curTrack.get(uri))
             #print(tracks.values())
             tracksIter = iter(uriList)
             for i in tracksIter:
