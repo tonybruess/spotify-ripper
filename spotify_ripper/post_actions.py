@@ -284,7 +284,7 @@ class PostActions(object):
 
     def remove_tracks_from_playlist(self):
         ripper = self.ripper
-        remove_all_from_playlist(ripper.session.user.canonical_name, ripper.playlisy_uri)
+        remove_all_from_playlist(ripper.session.user.canonical_name, ripper.playlist_uri)
         print("Playlist Emptied!")
 
     def remove_offline_cache(self):
