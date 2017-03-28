@@ -430,7 +430,7 @@ class Ripper(threading.Thread):
             print('get playlist tracks')
             tracks = get_playlist_tracks(self.session.user.canonical_name, uri)
             while(1==1):
-                curTrack = tracks.get(curr)
+                curTrack = tracks.get('items')
                 print(curTrack)
                 uriList.append(curTrack.get(uri))
             #print(tracks.values())
