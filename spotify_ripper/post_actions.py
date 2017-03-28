@@ -283,6 +283,7 @@ class PostActions(object):
                       "Did you use '-r' without a playlist link?" + Fore.RESET)
 
     def remove_tracks_from_playlist(self):
+        ripper = self.ripper
         remove_all_from_playlist(ripper.session.user.canonical_name, ripper.current_playlist.link.uri)
         print("Playlist Emptied!")
 
