@@ -225,6 +225,7 @@ class Ripper(threading.Thread):
 
         # calculate total size and time
         all_tracks = []
+        trackList = []
         for uri in uris:
             tracks = list(get_tracks_from_uri(uri))
 
