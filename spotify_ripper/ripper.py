@@ -457,7 +457,7 @@ class Ripper(threading.Thread):
             #print(tracks.values())
             tracksIter = iter(uriList)
             for i in tracksIter:
-                trackList.append(i.as_track())
+                trackList.append(self.session.get_link(i).as_track())
             # self.current_playlist = link.as_playlist()
             # attempt_count = 1
             # while self.current_playlist is None:
