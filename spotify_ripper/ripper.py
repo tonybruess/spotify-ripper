@@ -435,7 +435,11 @@ class Ripper(threading.Thread):
             for n in list_list:
                 list_list_list = n
                 #count = 0
+                print('list_list_list type is')
+                print(type(n))
                 for x in list_list_list:
+                    print('x type is')
+                    print(type(x))
                     print(x)
                     print('\n')
                     #curTrack = x.get('uri')
