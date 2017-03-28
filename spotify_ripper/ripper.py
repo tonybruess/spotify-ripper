@@ -225,7 +225,6 @@ class Ripper(threading.Thread):
 
         # calculate total size and time
         all_tracks = []
-        trackList = []
         for uri in uris:
             tracks = list(get_tracks_from_uri(uri))
 
@@ -419,7 +418,7 @@ class Ripper(threading.Thread):
         # ignore if the uri is just blank (e.g. from a file)
         if not uri:
             return iter([])
-
+        trackList = []
         args = self.args
         link = self.session.get_link(uri)
         if link.type == spotify.LinkType.TRACK:
