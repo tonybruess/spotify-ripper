@@ -422,68 +422,31 @@ class Ripper(threading.Thread):
         uriList = []
         args = self.args
         link = self.session.get_link(uri)
-        curr = 0
-        list_list = []
-        list_list_list = []
+        track_list = []
         if link.type == spotify.LinkType.TRACK:
             track = link.as_track()
             return iter([track])
         elif link.type == spotify.LinkType.PLAYLIST:
             print('get playlist tracks')
             tracks = get_playlist_tracks(self.session.user.canonical_name, uri)
-            list_list = tracks.get('items')
-            for n in list_list:
-                list_list_list = n
-                #count = 0
-                #print('list_list_list type is')
-                #print(type(n))
-                thisTrack = list_list_list.get('track')
-                #print('thisTrack type is')
-                #print(type(thisTrack))
+            track_list = tracks.get('items')
+            for n in track_list:
+                thisTrack = n.get('track')
                 thisTrackuri = thisTrack.get('uri')
                 uriList.append(thisTrackuri)
-                #print(thisTrackuri)
-                #thisTrackName = thisTrack.get('name')
-                #print(thisTrackName)
-                # for x in thisTrack:
-                #     print('x type is')
-                #     print(type(x))
-                #     print(x)
-                #     print('\n')
-                    #curTrack = x.get('uri')
-                    #print(curTrack)
-                    #count = count + 1
-                    #uriList.append(curTrack.get(uri))
-            #print(tracks.values())
             tracksIter = iter(uriList)
             for i in tracksIter:
                 trackList.append(self.session.get_link(i).as_track())
-            # self.current_playlist = link.as_playlist()
-            # attempt_count = 1
-            # while self.current_playlist is None:
-            #     if attempt_count > 3:
-            #         print(Fore.RED + "Could not load playlist..." +
-            #               Fore.RESET)
-            #         return iter([])
-            #     print("Attempt " + str(attempt_count) + " failed: Spotify " +
-            #           "returned None for playlist, trying again in 5 " +
-            #           "seconds...")
-            #     time.sleep(5.0)
-            #     self.current_playlist = link.as_playlist()
-            #     attempt_count += 1
             print('Loading playlist...')
-            #self.current_playlist.load(args.timeout)
             return iter(trackList)
         elif link.type == spotify.LinkType.STARRED:
             link_user = link.as_user()
-
             def load_starred():
                 if link_user is not None:
                     return self.session.get_starred(link_user.canonical_name)
                 else:
                     return self.session.get_starred()
             starred = load_starred()
-
             attempt_count = 1
             while starred is None:
                 if attempt_count > 3:
@@ -496,7 +459,6 @@ class Ripper(threading.Thread):
                 time.sleep(5.0)
                 starred = load_starred()
                 attempt_count += 1
-
             print('Loading starred playlist...')
             starred.load(args.timeout)
             return iter(starred.tracks)
