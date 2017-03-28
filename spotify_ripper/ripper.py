@@ -435,15 +435,16 @@ class Ripper(threading.Thread):
             for n in list_list:
                 list_list_list = n
                 #count = 0
-                print('list_list_list type is')
-                print(type(n))
+                #print('list_list_list type is')
+                #print(type(n))
                 thisTrack = list_list_list.get('track')
-                print('thisTrack type is')
-                print(type(thisTrack))
+                #print('thisTrack type is')
+                #print(type(thisTrack))
                 thisTrackuri = thisTrack.get('uri')
-                print(thisTrackuri)
-                thisTrackName = thisTrack.get('name')
-                print(thisTrackName)
+                uriList.append(thisTrackuri)
+                #print(thisTrackuri)
+                #thisTrackName = thisTrack.get('name')
+                #print(thisTrackName)
                 # for x in thisTrack:
                 #     print('x type is')
                 #     print(type(x))
@@ -456,7 +457,7 @@ class Ripper(threading.Thread):
             #print(tracks.values())
             tracksIter = iter(uriList)
             for i in tracksIter:
-                trackList.append(tracksIter.next.as_track())
+                trackList.append(i.as_track())
             # self.current_playlist = link.as_playlist()
             # attempt_count = 1
             # while self.current_playlist is None:
