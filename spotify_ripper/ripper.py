@@ -439,7 +439,7 @@ class Ripper(threading.Thread):
 
                     curTrack = list_list_list[count]
                     print(curTrack)
-                    count++
+                    count = count + 1
                     uriList.append(curTrack.get(uri))
             #print(tracks.values())
             tracksIter = iter(uriList)
