@@ -424,6 +424,7 @@ class Ripper(threading.Thread):
         link = self.session.get_link(uri)
         curr = 0
         list_list = {}
+        list_list_list = []
         if link.type == spotify.LinkType.TRACK:
             track = link.as_track()
             return iter([track])
@@ -432,9 +433,11 @@ class Ripper(threading.Thread):
             tracks = get_playlist_tracks(self.session.user.canonical_name, uri)
             list_list = tracks.get('items')
             for n in list_list:
-                curTrack = list_list[n].get(track)
-                print(curTrack)
-                uriList.append(curTrack.get(uri))
+                list_list_list = list_list[n]
+                for n in list_list_list:
+                    curTrack = list_list_list[n]
+                    print(curTrack)
+                    uriList.append(curTrack.get(uri))
             #print(tracks.values())
             tracksIter = iter(uriList)
             for i in tracksIter:
