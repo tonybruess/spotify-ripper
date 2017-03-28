@@ -442,6 +442,8 @@ class Ripper(threading.Thread):
                 print(type(thisTrack))
                 thisTrackuri = thisTrack.get('uri')
                 print(thisTrackuri)
+                thisTrackName = thisTrack.get('name')
+                print(thisTrackName)
                 # for x in thisTrack:
                 #     print('x type is')
                 #     print(type(x))
