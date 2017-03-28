@@ -8,9 +8,9 @@ client_secret = ''
 scope = 'playlist-modify-public playlist-modify-private playlist-read-collaborative'
 print(os.environ["test"])
 
-client_id = os.environ["SPOTIPY_CLIENT_ID"] 
-client_secret = os.environ["SPOTIPY_CLIENT_SECRET"]
-redirect_uri = os.environ["SPOTIPY_REDIRECT_URI"]
+# client_id = os.environ["SPOTIPY_CLIENT_ID"] 
+# client_secret = os.environ["SPOTIPY_CLIENT_SECRET"]
+# redirect_uri = os.environ["SPOTIPY_REDIRECT_URI"]
 
 def remove_all_from_playlist(username, playlistURI):
     tracks = get_playlist_tracks(username, playlistURI)
