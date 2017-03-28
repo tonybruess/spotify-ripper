@@ -427,8 +427,9 @@ class Ripper(threading.Thread):
         elif link.type == spotify.LinkType.PLAYLIST:
             print('get playlist tracks')
             tracks = get_playlist_tracks(self.session.user.canonical_name, uri)
-            for i in tracks:
-                trackList.append(tracks.next.as_track())
+            tracksIter = iter(tracks)
+            for i in tracksIter:
+                trackList.append(tracksIter.next.as_track())
             # self.current_playlist = link.as_playlist()
             # attempt_count = 1
             # while self.current_playlist is None:
