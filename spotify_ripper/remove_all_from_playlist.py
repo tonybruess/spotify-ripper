@@ -12,6 +12,10 @@ print(os.environ["test"])
 # client_secret = os.environ["SPOTIPY_CLIENT_SECRET"]
 # redirect_uri = os.environ["SPOTIPY_REDIRECT_URI"]
 
+token = None
+spotInstance = None
+
+
 def remove_all_from_playlist(username, playlistURI):
     tracks = get_playlist_tracks(username, playlistURI)
 
