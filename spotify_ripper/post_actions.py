@@ -260,7 +260,7 @@ class PostActions(object):
             if self.args.plus_pcm:
                 delete_extra_file("pcm")
 
-    def queue_remove_from_playlist(self, idx):
+    def queue_remove_from_playlist(self, idx): #depreciated
         ripper = self.ripper
 
         if self.args.remove_from_playlist:
@@ -269,7 +269,7 @@ class PostActions(object):
                         ripper.session.user.canonical_name:
                         #modified to use webAPI
                         #self.tracks_to_remove.append(idx)
-                        remove_all_from_playlist(ripper.session.user.canonical_name, ripper.current_playlist.link.uri)
+                        # remove_all_from_playlist(ripper.session.user.canonical_name, ripper.current_playlist.link.uri)
                         print("Emptying Playlist")
                 else:
                     print(Fore.RED +
@@ -284,8 +284,6 @@ class PostActions(object):
 
     def remove_tracks_from_playlist(self):
         ripper = self.ripper
-        print(ripper.playlist_uri)
-        print(type(ripper.playlist_uri))
         remove_all_from_playlist(ripper.session.user.canonical_name, ripper.playlist_uri)
         print("Playlist Emptied!")
 
