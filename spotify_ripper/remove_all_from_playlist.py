@@ -6,7 +6,6 @@ redirect_uri = 'http://www.purple.com'
 client_id = ''
 client_secret = ''
 scope = 'playlist-modify-public playlist-modify-private playlist-read-collaborative'
-print(os.environ["test"])
 
 # client_id = os.environ["SPOTIPY_CLIENT_ID"] 
 # client_secret = os.environ["SPOTIPY_CLIENT_SECRET"]
