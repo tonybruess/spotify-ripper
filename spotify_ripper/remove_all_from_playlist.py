@@ -24,7 +24,7 @@ def remove_all_from_playlist(username, playlistURI):
         track = item['track']
         tid = track['id']
         track_ids.append(tid)
-    results = self.spotInstance.user_playlist_remove_all_occurrences_of_tracks(username, rPlaylistID, track_ids)
+    results = spotInstance.user_playlist_remove_all_occurrences_of_tracks(username, rPlaylistID, track_ids)
 
 
 def get_playlist_tracks(username, playlistURI):
