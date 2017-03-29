@@ -59,7 +59,7 @@ class Ripper(threading.Thread):
     dev_null = None
     stop_time = None
     track_path_cache = {}
-    playlist_uri
+    playlist_uri = None
     rip_queue = queue.Queue()
 
     # threading events
@@ -428,7 +428,7 @@ class Ripper(threading.Thread):
             return iter([track])
         elif link.type == spotify.LinkType.PLAYLIST:
             print('get playlist tracks')
-            playlist_uri = uri
+            self.playlist_uri = uri
             print(playlist_uri)
             print(type(playlist_uri))
             tracks = get_playlist_tracks(self.session.user.canonical_name, uri)
