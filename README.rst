@@ -7,9 +7,9 @@ A fork of
                 please read the section below "Remove From Playlist Option" for instructions and tips on setting up a web api client and generating a token
 
                 make sure you export the web api credentials in your unix shell
-                export SPOTIPY_CLIENT_ID=‘client_id’
-                export SPOTIPY_CLIENT_SECRET=‘client_secret’
-                export SPOTIPY_REDIRECT_URI=‘http://www.purple.com’
+                export SPOTIPY_CLIENT_ID='77aa1aa93dc0416397f22a7a9b4a815b'
+                export SPOTIPY_CLIENT_SECRET='0d79181c57ee412aaa770af257edf07a'
+                export SPOTIPY_REDIRECT_URI='http://www.purple.com'
 
 Spotify-ripper is a small ripper script for Spotify that rips Spotify
 URIs to audio files and includes ID3 tags and cover art.  By default spotify-ripper will encode to MP3 files, but includes the ability to rip to WAV, FLAC, Ogg Vorbis, Opus, AAC, and MP4/M4A.
