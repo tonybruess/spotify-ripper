@@ -6,6 +6,11 @@ A fork of
 ***IMPORTANT*** Due to the playlist retreival method of libspotify (pyspotify library) no longer functioning, a spotify web api account is now required for playlist ripping and emptying
                 please read the section below "Remove From Playlist Option" for instructions and tips on setting up a web api client and generating a token
 
+                make sure you export the web api credentials in your unix shell
+                export SPOTIPY_CLIENT_ID=‘client_id’
+                export SPOTIPY_CLIENT_SECRET=‘client_secret’
+                export SPOTIPY_REDIRECT_URI=‘http://www.purple.com’
+
 Spotify-ripper is a small ripper script for Spotify that rips Spotify
 URIs to audio files and includes ID3 tags and cover art.  By default spotify-ripper will encode to MP3 files, but includes the ability to rip to WAV, FLAC, Ogg Vorbis, Opus, AAC, and MP4/M4A.
 
