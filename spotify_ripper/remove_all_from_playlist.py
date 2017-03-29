@@ -30,9 +30,9 @@ def remove_all_from_playlist(username, playlistURI):
 def get_playlist_tracks(username, playlistURI):
     p1, p2, p3, p4, rPlaylistID = playlistURI.split(':', 5)
 
-    self.token = util.prompt_for_user_token(username, scope)
+    global token = util.prompt_for_user_token(username, scope)
 
-    self.spotInstance = spotipy.Spotify(auth=token)
+    global spotInstance = spotipy.Spotify(auth=token)
     spotInstance.trace = False
 
     print('Getting Results')
