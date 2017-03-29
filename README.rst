@@ -3,7 +3,8 @@ spotify-ripper |Version|
 A fork of
 `spotify-ripper <https://github.com/jrnewell/spotify-ripper`__ that uses `spotipy <https://github.com/plamere/spotipy>`__ for WebAPI integration and playlist updating
 
-
+***IMPORTANT*** Due to the playlist retreival method of libspotify (pyspotify library) no longer functioning, a spotify web api account is now required for playlist ripping and emptying
+                please read the section below "Remove From Playlist Option" for instructions and tips on setting up a web api client and generating a token
 
 Spotify-ripper is a small ripper script for Spotify that rips Spotify
 URIs to audio files and includes ID3 tags and cover art.  By default spotify-ripper will encode to MP3 files, but includes the ability to rip to WAV, FLAC, Ogg Vorbis, Opus, AAC, and MP4/M4A.
@@ -354,6 +355,8 @@ A couple notes about Spotify's WebAPI token authentication:
 - The authentication token is stored where the script is executed from, so if you're in your home directory and execute a script thats in /usr/bin it will be stored in your home directory
 
 - If you are running this in a script or other form of automation, you'll have to manually authenticate once but after that as long as you always execute it from the same location you won't have to authenticate again.
+
+- Depending on your browser, it may redirect quickly after going to http://www.purple.com?code=XXXXXXXXXX....  you have to be quick to copy the url with the full code and paste it into your terminal otherwise you'll have to re run the program to generate a new token
 
 Installation
 ------------
