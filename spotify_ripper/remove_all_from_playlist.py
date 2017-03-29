@@ -24,15 +24,15 @@ def remove_all_from_playlist(username, playlistURI):
         track = item['track']
         tid = track['id']
         track_ids.append(tid)
-    results = spotInstance.user_playlist_remove_all_occurrences_of_tracks(username, rPlaylistID, track_ids)
+    results = self.spotInstance.user_playlist_remove_all_occurrences_of_tracks(username, rPlaylistID, track_ids)
 
 
 def get_playlist_tracks(username, playlistURI):
     p1, p2, p3, p4, rPlaylistID = playlistURI.split(':', 5)
 
-    token = util.prompt_for_user_token(username, scope)
+    self.token = util.prompt_for_user_token(username, scope)
 
-    spotInstance = spotipy.Spotify(auth=token)
+    self.spotInstance = spotipy.Spotify(auth=token)
     spotInstance.trace = False
 
     print('Getting Results')
