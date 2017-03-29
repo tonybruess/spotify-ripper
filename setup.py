@@ -45,6 +45,7 @@ setup(
         'mutagen==1.30',
         'requests>=2.3.0',
         'schedule>=0.3.1',
+        'spotipy==2.4.4'
     ],
 
     # Metadata
