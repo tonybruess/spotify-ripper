@@ -272,6 +272,7 @@ class Ripper(threading.Thread):
                             Fore.RED + 'Track is not available, '
                                        'skipping...' + Fore.RESET)
                         self.post.log_failure(track)
+                        self.progress.track_idx += 1
                         continue
 
                     self.audio_file = self.format_track_path(idx, track)
@@ -285,6 +286,7 @@ class Ripper(threading.Thread):
                                 track.link.uri + Fore.RESET)
                             print(Fore.CYAN + self.audio_file + Fore.RESET)
                             self.post.queue_remove_from_playlist(idx)
+                            self.progress.track_idx += 1
                             continue
 
                     self.session.player.load(track)
