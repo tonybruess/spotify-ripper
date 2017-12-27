@@ -591,9 +591,12 @@ def main(prog_args=sys.argv[1:]):
 
     # wait for ripping thread to finish
     if not args.has_log:
-        stdin_settings = termios.tcgetattr(sys.stdin)
+        try:
+            stdin_settings = termios.tcgetattr(sys.stdin)
+        except termios.error:
+            stdin_settings = None
     try:
-        if not args.has_log:
+        if not args.has_log and stdin_settings:
             tty.setcbreak(sys.stdin.fileno())
 
         while ripper.isAlive():
@@ -611,7 +614,7 @@ def main(prog_args=sys.argv[1:]):
         print("\n" + Fore.RED + "Aborting..." + Fore.RESET)
         abort()
     finally:
-        if not args.has_log:
+        if not args.has_log and stdin_settings:
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, stdin_settings)
 
 if __name__ == '__main__':
