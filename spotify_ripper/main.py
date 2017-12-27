@@ -119,6 +119,18 @@ def main(prog_args=sys.argv[1:]):
     }
     defaults = load_config(defaults)
 
+    spotipy_envs = [
+        "SPOTIPY_CLIENT_ID",
+        "SPOTIPY_CLIENT_SECRET",
+        "SPOTIPY_REDIRECT_URI"
+    ]
+
+    for spotipy_env in spotipy_envs:
+        if spotipy_env not in os.environ:
+            value = defaults.get(spotipy_env.lower())
+            if value:
+                os.environ[spotipy_env] = value
+
     parser = argparse.ArgumentParser(
         prog='spotify-ripper',
         description='Rips Spotify URIs to MP3s with ID3 tags and album covers',
