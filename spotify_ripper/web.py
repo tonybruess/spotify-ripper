@@ -11,6 +11,25 @@ import requests
 import csv
 import re
 
+import spotipy
+import spotipy.client
+from spotipy.oauth2 import SpotifyClientCredentials
+
+client_credentials_sp = None
+
+def init_client_credentials_sp():
+
+    global client_credentials_sp
+    if client_credentials_sp is None:
+        client_credentials_manager = SpotifyClientCredentials()
+        client_credentials_sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+        client_credentials_sp.trace = False
+
+    return client_credentials_sp
+
+def get_album(albumURI):
+    sp = init_client_credentials_sp()
+    return sp.album(albumURI)
 
 class WebAPI(object):
 
@@ -32,8 +51,17 @@ class WebAPI(object):
         return self.cache[name].get(uri)
 
     def request_json(self, url, msg):
-        res = self.request_url(url, msg)
-        return res.json() if res is not None else res
+        print(Fore.GREEN + "Attempting to retrieve " + msg +
+              " from Spotify's Web API" + Fore.RESET)
+        print(Fore.CYAN + url + Fore.RESET)
+        sp = init_client_credentials_sp()
+        try:
+            res = sp._get(url)
+        except spotify.SpotifyException as e:
+            print(Fore.YELLOW + "URL returned non-200 HTTP code: " +
+                  str(e.http_status) + " message: " + e.msg + Fore.RESET)
+            return None
+        return res
 
     def request_url(self, url, msg):
         print(Fore.GREEN + "Attempting to retrieve " + msg +
