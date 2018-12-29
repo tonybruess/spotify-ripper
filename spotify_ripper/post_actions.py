@@ -9,6 +9,7 @@ import time
 import spotify
 import codecs
 import shutil
+from spotify_ripper.remove_all_from_playlist import remove_all_from_playlist
 
 
 class PostActions(object):
@@ -28,8 +29,9 @@ class PostActions(object):
                 os.makedirs(enc_str(_base_dir))
 
             encoding = "ascii" if args.ascii else "utf-8"
-            self.fail_log_file = codecs.open(os.path.join(
-                _base_dir, args.fail_log[0]), 'w', encoding)
+            self.fail_log_file = codecs.open(
+                enc_str(os.path.join(_base_dir, args.fail_log)),
+                'w', encoding)
 
     def log_success(self, track):
         self.success_tracks.append(track)
@@ -63,7 +65,7 @@ class PostActions(object):
         def log_tracks(tracks):
             for track in tracks:
                 try:
-                    track.load()
+                    track.load(self.args.timeout)
                     if (len(track.artists) > 0 and track.artists[0].name
                             is not None and track.name is not None):
                         print_with_bullet(track.artists[0].name + " - " +
@@ -179,11 +181,9 @@ class PostActions(object):
             print(Fore.GREEN + "Creating playlist m3u file " +
                   playlist_path_fixed + Fore.RESET)
             encoding = "ascii" if args.ascii else "utf-8"
-            print(Fore.GREEN + "Gotta fix playlist name. " +
-                  playlist_path_fixed + Fore.RESET)
-            with codecs.open(playlist_path_fixed, 'w', encoding) as playlist:
+            with codecs.open(enc_str(playlist_path), 'w', encoding) as playlist:
                 for idx, track in enumerate(tracks):
-                    track.load()
+                    track.load(args.timeout)
                     if track.is_local:
                         continue
                     _file = ripper.format_track_path(idx, track)
@@ -207,11 +207,11 @@ class PostActions(object):
                   playlist_path + Fore.RESET)
 
             encoding = "ascii" if args.ascii else "utf-8"
-            with codecs.open(playlist_path, 'w', encoding) as playlist:
+            with codecs.open(enc_str(playlist_path), 'w', encoding) as playlist:
                 # to get an accurate track count
                 track_paths = []
                 for idx, track in enumerate(tracks):
-                    track.load()
+                    track.load(args.timeout)
                     if track.is_local:
                         continue
                     _file = ripper.format_track_path(idx, track)
@@ -250,14 +250,29 @@ class PostActions(object):
             print(Fore.YELLOW + "Deleting partially ripped file" + Fore.RESET)
             rm_file(ripper.audio_file)
 
-    def queue_remove_from_playlist(self, idx):
+            # check for any extra pcm or wav files
+            def delete_extra_file(ext):
+                audio_file = change_file_extension(ripper.audio_file, ext)
+                if path_exists(audio_file):
+                    rm_file(audio_file)
+
+            if self.args.plus_wav:
+                delete_extra_file("wav")
+
+            if self.args.plus_pcm:
+                delete_extra_file("pcm")
+
+    def queue_remove_from_playlist(self, idx): #depreciated
         ripper = self.ripper
 
         if self.args.remove_from_playlist:
             if ripper.current_playlist:
                 if ripper.current_playlist.owner.canonical_name == \
                         ripper.session.user.canonical_name:
-                    self.tracks_to_remove.append(idx)
+                        #modified to use webAPI
+                        #self.tracks_to_remove.append(idx)
+                        # remove_all_from_playlist(ripper.session.user.canonical_name, ripper.current_playlist.link.uri)
+                        print("Emptying Playlist")
                 else:
                     print(Fore.RED +
                           "This track will not be removed from playlist " +
@@ -270,25 +285,17 @@ class PostActions(object):
                       "Did you use '-r' without a playlist link?" + Fore.RESET)
 
     def remove_tracks_from_playlist(self):
-        ripper = self.ripper
-
-        if self.args.remove_from_playlist and \
-                ripper.current_playlist and len(self.tracks_to_remove) > 0:
-            print(Fore.YELLOW +
-                  "Removing successfully ripped tracks from playlist " +
-                  ripper.current_playlist.name + "..." + Fore.RESET)
-
-            ripper.current_playlist.remove_tracks(self.tracks_to_remove)
-
-            while ripper.current_playlist.has_pending_changes:
-                time.sleep(0.1)
+        if self.args.remove_from_playlist:
+            ripper = self.ripper
+            remove_all_from_playlist(ripper.session.user.canonical_name, ripper.playlist_uri)
+            print("Playlist Emptied!")
 
     def remove_offline_cache(self):
         ripper = self.ripper
 
         if self.args.remove_offline_cache:
             if self.args.settings is not None:
-                storage_path = norm_path(self.args.settings[0])
+                storage_path = norm_path(self.args.settings)
             else:
                 storage_path = default_settings_dir()
 

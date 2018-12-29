@@ -1,9 +1,15 @@
 spotify-ripper |Version|
 ========================
-
 A fork of
-`spotify-ripper <https://github.com/robbeofficial/spotifyripper>`__ that
-uses `pyspotify <https://github.com/mopidy/pyspotify>`__ v2.x
+`spotify-ripper <https://github.com/jrnewell/spotify-ripper`__ that uses `spotipy <https://github.com/plamere/spotipy>`__ for WebAPI integration and playlist updating
+
+***IMPORTANT*** Due to the playlist retreival method of libspotify (pyspotify library) no longer functioning, a spotify web api account is now required for playlist ripping and emptying
+                please read the section below "Remove From Playlist Option" for instructions and tips on setting up a web api client and generating a token
+
+                make sure you export the web api credentials in your unix shell
+                export SPOTIPY_CLIENT_ID='77aa1aa93dc0416397f22a7a9b4a815b'
+                export SPOTIPY_CLIENT_SECRET='0d79181c57ee412aaa770af257edf07a'
+                export SPOTIPY_REDIRECT_URI='http://www.purple.com'
 
 Spotify-ripper is a small ripper script for Spotify that rips Spotify
 URIs to audio files and includes ID3 tags and cover art.  By default spotify-ripper will encode to MP3 files, but includes the ability to rip to WAV, FLAC, Ogg Vorbis, Opus, AAC, and MP4/M4A.
@@ -56,6 +62,8 @@ Features
 
 -  option to rip to FLAC, a loseless codec, instead of MP3 (requires extra ``flac`` dependency)
 
+-  option to rip to AIFF, a loseless codec, instead of MP3 (requires extra ``sox`` dependency)
+
 -  option to rip to Ogg Vorbis instead of MP3 (requires extra ``vorbis-tools`` dependency)
 
 -  option to rip to Opus instead of MP3 (requires extra ``opus-tools`` dependency)
@@ -81,8 +89,8 @@ Command Line
 
 .. code::
 
-    usage: spotify-ripper [-h] [-S SETTINGS] [-a] [--aac] [--alac]
-                          [--artist-album-type ARTIST_ALBUM_TYPE]
+    usage: spotify-ripper [-h] [-S SETTINGS] [-a] [--aac] [--aiff] [--alac]
+                          [--all-artists] [--artist-album-type ARTIST_ALBUM_TYPE]
                           [--artist-album-market ARTIST_ALBUM_MARKET] [-A]
                           [-b BITRATE] [-c] [--comp COMP] [--comment COMMENT]
                           [--cover-file COVER_FILE]
@@ -91,15 +99,17 @@ Command Line
                           [--format-case {upper,lower,capitalize}] [--flat]
                           [--flat-with-index] [-g {artist,album}]
                           [--grouping GROUPING] [--id3-v23] [-k KEY] [-u USER]
-                          [-p PASSWORD] [-l] [-L LOG] [--pcm] [--mp4]
-                          [--normalize] [-na] [-o] [--opus]
+                          [-p PASSWORD] [--large-cover-art] [-l] [-L LOG] [--pcm]
+                          [--mp4] [--normalize] [-na] [-o] [--opus]
                           [--partial-check {none,weak,strict}]
                           [--play-token-resume RESUME_AFTER] [--playlist-m3u]
-                          [--playlist-wpl] [--playlist-sync] [-q VBR]
-                          [-Q {160,320,96}] [--remove-offline-cache]
-                          [--resume-after RESUME_AFTER] [-R REPLACE [REPLACE ...]]
-                          [-s] [--stereo-mode {j,s,f,d,m,l,r}]
-                          [--stop-after STOP_AFTER] [-V] [--wav] [--vorbis] [-r]
+                          [--playlist-wpl] [--playlist-sync] [--plus-pcm]
+                          [--plus-wav] [-q VBR] [-Q {160,320,96}]
+                          [--remove-offline-cache] [--resume-after RESUME_AFTER]
+                          [-R REPLACE [REPLACE ...]] [-s]
+                          [--stereo-mode {j,s,f,d,m,l,r}]
+                          [--stop-after STOP_AFTER] [--timeout TIMEOUT] [-V]
+                          [--wav] [--windows-safe] [--vorbis] [-r]
                           uri [uri ...]
 
     Rips Spotify URIs to MP3s with ID3 tags and album covers
@@ -113,7 +123,9 @@ Command Line
                             Path to settings, config and temp files directory [Default=~/.spotify-ripper]
       -a, --ascii           Convert the file name and the metadata tags to ASCII encoding [Default=utf-8]
       --aac                 Rip songs to AAC format with FreeAAC instead of MP3
+      --aiff                Rip songs to lossless AIFF encoding instead of MP3
       --alac                Rip songs to Apple Lossless format instead of MP3
+      --all-artists         Store all artists, rather than just the main artist, in the track's metadata tag
       --artist-album-type ARTIST_ALBUM_TYPE
                             Only load albums of specified types when passing a Spotify artist URI [Default=album,single,ep,compilation,appears_on]
       --artist-album-market ARTIST_ALBUM_MARKET
@@ -147,6 +159,7 @@ Command Line
       -u USER, --user USER  Spotify username
       -p PASSWORD, --password PASSWORD
                             Spotify password [Default=ask interactively]
+      --large-cover-art     Attempt to retrieve 640x640 cover art from Spotify's Web API [Default=300x300]
       -l, --last            Use last login credentials
       -L LOG, --log LOG     Log in a log-friendly format to a file (use - to log to stdout)
       --pcm                 Saves a .pcm file with the raw PCM data instead of MP3
@@ -163,6 +176,8 @@ Command Line
       --playlist-m3u        create a m3u file when ripping a playlist
       --playlist-wpl        create a wpl file when ripping a playlist
       --playlist-sync       Sync playlist songs (rename and remove old songs)
+      --plus-pcm            Saves a .pcm file in addition to the encoded file (e.g. mp3)
+      --plus-wav            Saves a .wav file in addition to the encoded file (e.g. mp3)
       -q VBR, --vbr VBR     VBR quality setting or target bitrate for Opus [Default=0]
       -Q {160,320,96}, --quality {160,320,96}
                             Spotify stream bitrate preference [Default=320]
@@ -177,11 +192,13 @@ Command Line
                             Advanced stereo settings for Lame MP3 encoder only
       --stop-after STOP_AFTER
                             Stops script after a certain amount of time has passed (e.g. 1h30m). Alternatively, accepts a specific time in 24hr format to stop after (e.g 03:30, 16:15)
+      --timeout TIMEOUT     Override the PySpotify timeout value in seconds (Default=10 seconds)
       -V, --version         show program's version number and exit
       --wav                 Rip songs to uncompressed WAV file instead of MP3
+      --windows-safe        Make filename safe for Windows file system (truncate filename to 255 characters)
       --vorbis              Rip songs to Ogg Vorbis encoding instead of MP3
       -r, --remove-from-playlist
-                            Delete tracks from playlist after successful ripping [Default=no]
+                            [WARNING: READ BELOW TO SETUP WEB API FOR PLAYLIST EMPTYING] Delete tracks from playlist after successful ripping [Default=no]
 
     Example usage:
         rip a single file: spotify-ripper -u user spotify:track:52xaypL0Kjzk0ngwv3oBPR
@@ -290,6 +307,8 @@ Format String Variables
 |                                         | removed at the start of the string if it      |
 |                                         | exists                                        |
 +-----------------------------------------+-----------------------------------------------+
+|``{track_uri}``, ``{uri}``               | Spotify track uri                             |
++-----------------------------------------+-----------------------------------------------+
 
 Any substring in the format string that does not match a variable above will be passed through to the file/path name unchanged.
 
@@ -312,6 +331,38 @@ If at a later time, the playlist is changed on Spotify (i.e. songs reordered, re
 
 If you want to redownload a playlist (for example with improved quality), you either need to remove the song files from your local or use the ``--overwrite`` option.
 
+Remove From Playlist Option
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Since the work around to remove songs from a playlist uses the Spotify Web API, to enable --remove-from-playlist you must go through a few steps
+
+1: 
+Make an application at https://developer.spotify.com/my-applications/ name it whatever you like
+
+2: Generate and store you client_id and client_secret, you'll need these later
+
+3: Add http://www.purple.com to your applications Redirect URI's, make sure to click the green "ADD" button to the right of the field before pressing SAVE. I am not affiliated with www.purple.com, I just like what they do. If you want to use a different URI, ensure it doesn't use https and change the redirect_uri in remove_all_from_playlist.py
+   
+4: Press the "SAVE" button at the bottom of the page
+
+5: Install this package if you haven't already and navigate to it in the python version you installed it with (I would  suggest Python 3 at least) For example, my installation directory is "/usr/local/lib/python3.4/dist-packages/spotify_ripper/"
+   
+6: open remove_all_from_playlist.py in your favorite text editor. Add your client_id and client_secret between the single quotes next to the variables named the same thing
+
+7: If you have been using spotify-ripper for a while, it probably doesn't have accurate cache data on your playlists anymore. Find your ".spotify-ripper" folder, most likely in your home directory, and delete your "Users" folder. It will be regenerated on the next run.
+
+8: Finally, run spotify-ripper with the --remove-from-playlist command. When prompted, open the link it says it's opening for you in a web browser. Log into spotify, give it permission, and the copy the entire url it redirects to. If you're using the default redirect_url, it should be in the form "http://www.purple.com/?code=XXXXXXXXXXXX....." Ensure you haven't typed any other characters into where it asks for the URL you were redirected to, paste the URL and press enter. For some reason, when run through SSH you won't see anything you type or paste into this field.
+
+If you followed all of these steps correctly, spotify-ripper will completely empty the playlist you are ripping from when it finishes.
+
+A couple notes about Spotify's WebAPI token authentication:
+- The token is stored in a file named .profile-“username” without quotes
+
+- The authentication token is stored where the script is executed from, so if you're in your home directory and execute a script thats in /usr/bin it will be stored in your home directory
+
+- If you are running this in a script or other form of automation, you'll have to manually authenticate once but after that as long as you always execute it from the same location you won't have to authenticate again.
+
+- Depending on your browser, it may redirect quickly after going to http://www.purple.com?code=XXXXXXXXXX....  you have to be quick to copy the url with the full code and paste it into your terminal otherwise you'll have to re run the program to generate a new token
+
 Installation
 ------------
 
@@ -321,6 +372,8 @@ Prerequisites
 -  `libspotify <https://developer.spotify.com/technologies/libspotify>`__
 
 -  `pyspotify <https://github.com/mopidy/pyspotify>`__
+
+-  `spotipy <https://github.com/plamere/spotipy>`__
 
 -  a Spotify binary `app
    key <https://devaccount.spotify.com/my-account/keys/>`__
@@ -341,6 +394,8 @@ Prerequisites
 -  (optional) `faac <http://www.audiocoding.com/downloads.html>`__
 
 -  (optional) `fdkaac <https://github.com/nu774/fdkaac>`__
+
+-  (optional) `sox <http://sox.sourceforge.net>`__
 
 Mac OS X
 ~~~~~~~~
@@ -369,7 +424,7 @@ To install spotify-ripper once pyenv is setup:
     $ sudo ln -s /usr/local/opt/libspotify/lib/libspotify.12.1.51.dylib \
         /usr/local/opt/libspotify/lib/libspotify
     $ brew install lame
-    $ git clone https://github.com/hbashton/spotify-ripper.git && cd spotify-ripper && sudo python setup.py install
+    $ pip install git+https://github.com/SolidHal/spotify-ripper
     $ pyenv rehash
 
 **Note that Spotify may no longer be issuing developer keys.** See `Libspotify’s Deprecation`_
@@ -408,7 +463,8 @@ To install spotify-ripper once pyenv is setup:
     $ tar xvf libspotify-12.1.51-Linux-x86_64-release.tar.gz
     $ cd libspotify-12.1.51-Linux-x86_64-release/
     $ sudo make install prefix=/usr/local
-    $ git clone https://github.com/hbashton/spotify-ripper.git && cd spotify-ripper && sudo python setup.py install
+    $ pip install spotipy
+    $ pip3 install git+https://github.com/SolidHal/spotify-ripper --upgrade
     $ pyenv rehash
 
 **Note that Spotify may no longer be issuing developer keys.** See `Libspotify’s Deprecation`_
@@ -451,6 +507,9 @@ In addition to MP3 encoding, ``spotify-ripper`` supports encoding to FLAC, AAC, 
     # Opus
     $ brew install opus-tools
 
+    # SoX
+    $ brew install sox
+
 **Ubuntu/Debian**
 
 .. code:: bash
@@ -479,6 +538,9 @@ In addition to MP3 encoding, ``spotify-ripper`` supports encoding to FLAC, AAC, 
     # Opus
     $ sudo apt-get install opus-tools
 
+    # SoX
+    $ sudo apt-get install install sox
+
 
 Upgrade
 ~~~~~~~
@@ -487,8 +549,7 @@ Use ``git pull`` to upgrade to the latest version.
 
 .. code:: bash
 
-    $ cd spotify-ripper
-    $ git pull
+    $ pip install --upgrade git+https://github.com/SolidHal/spotify-ripper
 
 
 Common Issues and Problems

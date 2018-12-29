@@ -27,21 +27,21 @@ class Sync(object):
 
         # lib path
         if args.settings is not None:
-            lib_path = os.path.join(norm_path(args.settings[0]), "Sync")
+            lib_path = os.path.join(norm_path(args.settings), "Sync")
         else:
             lib_path = os.path.join(default_settings_dir(), "Sync")
 
         if not path_exists(lib_path):
             os.makedirs(enc_str(lib_path))
 
-        return os.path.join(enc_str(lib_path), enc_str(uri_tokens[4] + ".json"))
+        return os.path.join(lib_path, uri_tokens[4] + ".json")
 
     def save_sync_library(self, playlist, lib):
         args = self.args
         lib_path = self.sync_lib_path(playlist)
 
         encoding = "ascii" if args.ascii else "utf-8"
-        with codecs.open(lib_path, 'w', encoding) as lib_file:
+        with codecs.open(enc_str(lib_path), 'w', encoding) as lib_file:
             lib_file.write(
                 json.dumps(lib, ensure_ascii=args.ascii,
                            indent=4, separators=(',', ': ')))
@@ -50,16 +50,16 @@ class Sync(object):
         args = self.args
         lib_path = self.sync_lib_path(playlist)
 
-        if os.path.exists(lib_path):
+        if path_exists(lib_path):
             encoding = "ascii" if args.ascii else "utf-8"
-            with codecs.open(lib_path, 'r', encoding) as lib_file:
+            with codecs.open(enc_str(lib_path), 'r', encoding) as lib_file:
                 return json.loads(lib_file.read())
         else:
             return {}
 
     def sync_playlist(self, playlist):
         args = self.args
-        playlist.load()
+        playlist.load(args.timeout)
         lib = self.load_sync_library(playlist)
         new_lib = {}
 
@@ -68,7 +68,7 @@ class Sync(object):
         # create new lib
         for idx, track in enumerate(playlist.tracks):
             try:
-                track.load()
+                track.load(args.timeout)
                 if track.availability != 1 or track.is_local:
                     continue
 
