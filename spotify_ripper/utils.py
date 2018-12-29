@@ -212,6 +212,7 @@ def format_track_string(ripper, format_string, idx, track):
     track_num = str(track.index)
     disc_num = str(track.disc)
     track_uri = track.link.uri
+    track_url = track.link.url
 
     # calculate num of discs on the album
     num_discs = 0
@@ -295,7 +296,9 @@ def format_track_string(ripper, format_string, idx, track):
         "playlist_track_add_user": creator,
         "track_add_user": creator,
         "track_uri": track_uri,
-        "uri": track_uri
+        "uri": track_uri,
+        "track_url": track_url,
+        "url": track_url
     }
     fill_tags = {"idx", "index", "track_num", "track_idx",
                  "track_index", "disc_num", "disc_idx", "disc_index",

@@ -408,13 +408,6 @@ def main(prog_args=sys.argv[1:]):
               "<YOUR_USER_NAME>..." + Fore.RESET)
         sys.exit(1)
 
-    # give warning for broken feature
-    if args.remove_from_playlist:
-        print(Fore.RED + "--REMOVE-FROM-PLAYLIST WARNING:")
-        print("SPOTIFY HAS BROKEN libspotify")
-        print("THE PLAYLIST WILL BE EMPTIED AT THE END USING THE WEB API")
-        print("CHECK THE GITHUB FOR INSTRUCTIONS ON AUTHENTICATING THE WEB API"  + Fore.RESET)
-
     if args.wav:
         args.output_type = "wav"
     elif args.pcm:

@@ -13,23 +13,8 @@ import re
 
 import spotipy
 import spotipy.client
-from spotipy.oauth2 import SpotifyClientCredentials
-
-client_credentials_sp = None
-
-def init_client_credentials_sp():
-
-    global client_credentials_sp
-    if client_credentials_sp is None:
-        client_credentials_manager = SpotifyClientCredentials()
-        client_credentials_sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-        client_credentials_sp.trace = False
-
-    return client_credentials_sp
-
-def get_album(albumURI):
-    sp = init_client_credentials_sp()
-    return sp.album(albumURI)
+import spotipy.util as util
+import spotipy.oauth2 as oauth2
 
 class WebAPI(object):
 
@@ -41,8 +26,21 @@ class WebAPI(object):
             "artists_on_album": {},
             "genres": {},
             "charts": {},
-            "large_coverart": {}
+            "large_coverart": {},
+            "playlist_tracks": {}
         }
+        self.spo = None
+        self.sp = None
+
+    def api(self):
+        if not self.sp:
+            username = self.ripper.session.user.canonical_name
+            scope = 'playlist-modify-public playlist-modify-private playlist-read-collaborative'
+            token = util.prompt_for_user_token(username, scope)
+            self.spo = oauth2.SpotifyOAuth()
+            self.sp = spotipy.Spotify(auth=token)
+            self.sp.client_credentials_sp = False
+        return self.sp
 
     def cache_result(self, name, uri, result):
         self.cache[name][uri] = result
@@ -54,10 +52,9 @@ class WebAPI(object):
         print(Fore.GREEN + "Attempting to retrieve " + msg +
               " from Spotify's Web API" + Fore.RESET)
         print(Fore.CYAN + url + Fore.RESET)
-        sp = init_client_credentials_sp()
         try:
-            res = sp._get(url)
-        except spotify.SpotifyException as e:
+            res = self.spotipy()._get(url)
+        except spotipy.SpotifyException as e:
             print(Fore.YELLOW + "URL returned non-200 HTTP code: " +
                   str(e.http_status) + " message: " + e.msg + Fore.RESET)
             return None
@@ -67,7 +64,7 @@ class WebAPI(object):
         print(Fore.GREEN + "Attempting to retrieve " + msg +
               " from Spotify's Web API" + Fore.RESET)
         print(Fore.CYAN + url + Fore.RESET)
-        res = requests.get(url)
+        res = self.spotipy()._get(url)
         if res.status_code == 200:
             return res
         else:
@@ -80,6 +77,22 @@ class WebAPI(object):
 
     def charts_url(self, url_path):
         return 'https://spotifycharts.com/' + url_path
+
+    def get_playlist_tracks(self, uri):
+        cached_result = self.get_cached_result("playlist_tracks", uri)
+        if cached_result is not None:
+            return cached_result
+
+        _, _, user, _, playlist = uri.split(':', 5)
+        results = self.spotipy().user_playlist(user, playlist, fields="tracks,next")
+        tracks = results['tracks']
+
+        self.cache_result("playlist_tracks", uri, tracks)
+        return tracks
+
+    def remove_playlist_tracks(self, uri, tracks):
+        _, _, user, _, playlist = uri.split(':', 5)
+        self.spotipy().user_playlist_remove_all_occurrences_of_tracks(user, playlist, tracks)
 
     # excludes 'appears on' albums for artist
     def get_albums_with_filter(self, uri):

@@ -5,8 +5,7 @@ import os
 redirect_uri = 'http://www.purple.com'
 client_id = ''
 client_secret = ''
-scope = 'playlist-modify-public playlist-modify-private playlist-read-collaborative'
-
+ 
 # client_id = os.environ["SPOTIPY_CLIENT_ID"] 
 # client_secret = os.environ["SPOTIPY_CLIENT_SECRET"]
 # redirect_uri = os.environ["SPOTIPY_REDIRECT_URI"]
@@ -28,7 +27,6 @@ def remove_all_from_playlist(username, playlistURI):
 
 def get_playlist_tracks(username, playlistURI):
     global rPlaylistID
-    p1, p2, p3, p4, rPlaylistID = playlistURI.split(':', 5)
 
     global token 
     token = util.prompt_for_user_token(username, scope)

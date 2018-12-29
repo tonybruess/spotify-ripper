@@ -12,7 +12,6 @@ from spotify_ripper.web import WebAPI
 from spotify_ripper.sync import Sync
 from spotify_ripper.eventloop import EventLoop
 from datetime import datetime
-from spotify_ripper.remove_all_from_playlist import get_playlist_tracks
 import os
 import sys
 import time
@@ -340,9 +339,8 @@ class Ripper(threading.Thread):
                     # update id3v2 with metadata and embed front cover image
                     set_metadata_tags(args, self.audio_file, idx, track, self)
 
-                    # make a note of the index and remove all the
-                    # tracks from the playlist when everything is done
-                    self.post.queue_remove_from_playlist(idx)
+                    # remove all the tracks from the playlist when everything is done
+                    self.post.queue_remove_from_playlist(track.link.uri)
 
                     # finally log success
                     self.post.log_success(track)
@@ -429,9 +427,8 @@ class Ripper(threading.Thread):
             track = link.as_track()
             return iter([track])
         elif link.type == spotify.LinkType.PLAYLIST:
-            print('get playlist tracks')
             self.playlist_uri = uri
-            tracks = get_playlist_tracks(self.session.user.canonical_name, uri)
+            tracks = self.web.get_playlist_tracks(uri)
             track_list = tracks.get('items')
             for n in track_list:
                 thisTrack = n.get('track')

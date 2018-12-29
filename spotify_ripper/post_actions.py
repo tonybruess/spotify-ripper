@@ -9,7 +9,6 @@ import time
 import spotify
 import codecs
 import shutil
-from spotify_ripper.remove_all_from_playlist import remove_all_from_playlist
 
 
 class PostActions(object):
@@ -262,17 +261,13 @@ class PostActions(object):
             if self.args.plus_pcm:
                 delete_extra_file("pcm")
 
-    def queue_remove_from_playlist(self, idx): #depreciated
+    def queue_remove_from_playlist(self, uri):
         ripper = self.ripper
 
         if self.args.remove_from_playlist:
-            if ripper.current_playlist:
-                if ripper.current_playlist.owner.canonical_name == \
-                        ripper.session.user.canonical_name:
-                        #modified to use webAPI
-                        #self.tracks_to_remove.append(idx)
-                        # remove_all_from_playlist(ripper.session.user.canonical_name, ripper.current_playlist.link.uri)
-                        print("Emptying Playlist")
+            if ripper.playlist_uri:
+                if 'spotify:user:{}'.format(ripper.session.user.canonical_name) in ripper.playlist_uri:
+                        self.tracks_to_remove.append(uri)
                 else:
                     print(Fore.RED +
                           "This track will not be removed from playlist " +
@@ -287,8 +282,9 @@ class PostActions(object):
     def remove_tracks_from_playlist(self):
         if self.args.remove_from_playlist:
             ripper = self.ripper
-            remove_all_from_playlist(ripper.session.user.canonical_name, ripper.playlist_uri)
-            print("Playlist Emptied!")
+            ripper.web.remove_playlist_tracks(ripper.playlist_uri, self.tracks_to_remove)
+            print("Removed {} tracks".format(len(self.tracks_to_remove)))
+            self.tracks_to_remove = []
 
     def remove_offline_cache(self):
         ripper = self.ripper

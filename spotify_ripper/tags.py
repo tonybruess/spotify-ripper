@@ -11,7 +11,6 @@ import os
 import sys
 import base64
 
-
 def set_metadata_tags(args, audio_file, idx, track, ripper):
     # log completed file
     print(Fore.GREEN + Style.BRIGHT + os.path.basename(audio_file) +
@@ -46,6 +45,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
     genres = None
     if args.genres is not None:
         genres = ripper.web.get_genres(args.genres, track)
+        genres = [genre.title() for genre in genres]
 
     # use mutagen to update id3v2 tags and vorbis comments
     try:
@@ -153,7 +153,7 @@ def set_metadata_tags(args, audio_file, idx, track, ripper):
             if args.comment is not None:
                 audio.tags.add(
                     id3.COMM(text=[tag_to_ascii(comment, comment_ascii)],
-                             encoding=3))
+                             encoding=3, lang='eng', desc=''))
             if args.grouping is not None:
                 audio.tags.add(
                     id3.TIT1(text=[tag_to_ascii(grouping, grouping_ascii)],
